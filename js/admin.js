@@ -138,6 +138,7 @@ async function startRound(round) {
 
 async function openQuestion() {
   if (!A.game) return;
+  const qIdx    = A.game.questionIndex; // capture so stale timers don't close future questions
   const endTime = Date.now() + QUESTION_TIME_SECONDS * 1000;
   await gameRef.update({
     state: 'question_active',
@@ -148,7 +149,7 @@ async function openQuestion() {
   setTimeout(async () => {
     const snap = await gameRef.once('value');
     const g = snap.val();
-    if (g && g.state === 'question_active') {
+    if (g && g.state === 'question_active' && g.questionIndex === qIdx) {
       await gameRef.update({ state: 'question_closed' });
     }
   }, QUESTION_TIME_SECONDS * 1000 + 2000);
