@@ -1,6 +1,6 @@
 // CONFIG FILE FOR APP
 
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDLTu2uYUJV8L_mBvROKnj5PLbs4Tpvtfg",
   authDomain: "bnv-trivia.firebaseapp.com",
   databaseURL: "https://bnv-trivia-default-rtdb.firebaseio.com",
