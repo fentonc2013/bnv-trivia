@@ -360,7 +360,6 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
       <div class="card-title">Game Controls</div>
 
       ${state === 'lobby' && round === 1 ? `
-        <button class="btn btn-gold mb-16" onclick="resetGame()">🔄 Reset / New Game</button>
         <button class="btn btn-gold" onclick="startRound(1)">▶ Start Round 1</button>` : ''}
 
       ${state === 'lobby' && round === 2 ? `
@@ -389,8 +388,10 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
           : `<button class="btn btn-gold" onclick="endGame()">🏁 End Game & Show Final Scores</button>`}` : ''}
 
       ${state === 'game_end' ? `
-        <p class="text-center text-gold" style="font-size:18px;font-weight:700">🎉 Game Over!</p>
-        <button class="btn btn-outline mt-16" onclick="resetGame()">🔄 Start New Game</button>` : ''}
+        <p class="text-center text-gold" style="font-size:18px;font-weight:700">🎉 Game Over!</p>` : ''}
+
+      <hr style="border-color:var(--border);margin:16px 0">
+      <button class="btn btn-outline" onclick="resetGame()">🔄 Reset / New Game</button>
     </div>
 
     <div class="card mt-16">
