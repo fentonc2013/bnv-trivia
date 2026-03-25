@@ -375,8 +375,10 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
         <button class="btn btn-outline" onclick="closeQuestion()">⏹ Close Question Early</button>` : ''}
 
       ${state === 'question_closed' ? `
-        <p class="text-muted text-sm mb-16"><strong>${answerCount}</strong> answers received. Go to the <strong>Scoring</strong> tab to mark them.</p>
-        <button class="btn btn-gold" onclick="setTab('scoring')">✏️ Score Answers →</button>` : ''}
+        <p class="text-muted text-sm mb-16"><strong>${answerCount}</strong> answers received.</p>
+        ${answerCount > 0
+          ? `<button class="btn btn-gold" onclick="setTab('scoring')">✏️ Score Answers →</button>`
+          : `<button class="btn btn-gold" onclick="nextQuestion()">→ Skip &amp; Next Question / End Round</button>`}` : ''}
 
       ${state === 'scoring' ? `
         <button class="btn btn-gold" onclick="setTab('scoring')">✏️ Go to Scoring Tab</button>` : ''}
@@ -422,7 +424,10 @@ function buildScoringTab(q, key, state) {
     </div>
 
     ${playerIds.length === 0
-      ? `<div class="card"><p class="no-answers-msg">No answers submitted yet.</p></div>`
+      ? `<div class="card">
+           <p style="text-align:center;color:var(--text-muted);padding:16px 0">No answers submitted for this question.</p>
+           <button class="btn btn-gold" onclick="nextQuestion()">→ Skip &amp; Next Question / End Round</button>
+         </div>`
       : `<div style="margin-bottom:16px">
           ${playerIds.map(pid => {
             const p = A.players[pid];
@@ -450,7 +455,7 @@ function buildScoringTab(q, key, state) {
         </button>
         ${A.scoringApplied
           ? `<button class="btn btn-gold mt-8" onclick="nextQuestion()">→ Next Question / End Round</button>`
-          : ''}
+          : `<button class="btn btn-outline mt-8" onclick="nextQuestion()">→ Skip &amp; Next (no scores)</button>`}
         <p class="text-muted text-sm text-center mt-8">Players not marked get 0 for this question.</p>`}
   `;
 }
