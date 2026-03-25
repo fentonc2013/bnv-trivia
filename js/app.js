@@ -459,6 +459,8 @@ window.onload = function() {
   if (!authed) {
     S.view = 'password';
     render();
+    // Still init Firebase so it's ready when they pass the password screen
+    initFirebase();
     return;
   }
 
