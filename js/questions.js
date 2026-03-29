@@ -2,6 +2,9 @@
 // TRIVIA QUESTIONS
 // Replace or add questions here. Keep the same object structure.
 // 'answer' is shown to the ADMIN only as a scoring reference.
+// Optional flags:
+//   flag: 'must'  — always included somewhere in the game
+//   flag: 'skip'  — never included in the draw
 // ============================================================
 
 const QUESTIONS = [
@@ -29,14 +32,16 @@ const QUESTIONS = [
     round: 1,
     question: "Billy Joel, Alicia Keys, and Nas have all released a song with the same \"State of Mind\" about this major US city.",
     answer: "New York",
-    points: 1
+    points: 1,
+    flag: 'must'
   },
   {
     id: 'q4',
     round: 1,
     question: "Before she was a pop icon, this artist spent years as a Mouseketeer alongside Justin Timberlake and Ryan Gosling.",
     answer: "Britney Spears",
-    points: 1
+    points: 1,
+    flag: 'must'
   },
   {
     id: 'q5',
@@ -111,7 +116,8 @@ const QUESTIONS = [
     round: 1,
     question: "This Brooklyn-born artist is the only rapper in history to be inducted into both the Rock and Roll and Songwriters Hall of Fame.",
     answer: "Jay-Z",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q15',
@@ -132,14 +138,16 @@ const QUESTIONS = [
     round: 1,
     question: "This former member of Destiny's Child collaborated with Nelly on \"Dilemma,\" a 2002 duet that went on to win the Grammy for Best Rap/Sung Collaboration.",
     answer: "Kelly Rowland",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q18',
     round: 1,
     question: "This legendary guitarist, who first rose to fame in the 1960s, made a comeback with his 1999 album \"Supernatural\" — featuring collaborations with Rob Thomas and Everlast — and swept the Grammys winning 9 in a single night.",
     answer: "Santana",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q19',
@@ -158,7 +166,7 @@ const QUESTIONS = [
   {
     id: 'q21',
     round: 2,
-    question: "In 2003, this jazz-pop singer made history by winning 8 Grammys in a single night for her debut album Come Away with Me.",
+    question: "In 2003, this jazz-pop singer made history by winning 8 Grammys in a single night for her debut album \"Come Away with Me\".",
     answer: "Norah Jones",
     points: 2
   },
@@ -174,7 +182,8 @@ const QUESTIONS = [
     round: 2,
     question: "This alternative metal band, whose four members are all of Armenian descent, released the 2002 platinum-certified record Steal This Album! — featuring a cover designed to look like a hand-written, burned CD.",
     answer: "System of a Down",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q24',
@@ -195,7 +204,8 @@ const QUESTIONS = [
     round: 2,
     question: "Finish this Sublime lyric from \"What I Got\": \"Early in the morning, rising to the street, light me up that cigarette and I _____\"",
     answer: "strap shoes on my feet",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q27',
@@ -209,21 +219,24 @@ const QUESTIONS = [
     round: 2,
     question: "Three of these four bands performed at Woodstock 99 — Korn, Limp Bizkit, Linkin Park, Rage Against the Machine. Which one wasn't there?",
     answer: "Linkin Park",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q29',
     round: 2,
     question: "Nirvana, Pearl Jam, Alice in Chains, and Soundgarden were all defining bands of the 90s grunge scene — but only three of them recorded iconic MTV Unplugged sessions. Which one never did?",
     answer: "Soundgarden",
-    points: 2
+    points: 2,
+    flag: 'must'
   },
   {
     id: 'q30',
     round: 2,
     question: "In 2008, this artist released \"Love Story,\" a re-telling of Romeo and Juliet that became the first country song in history to top the Mainstream Top 40 chart, signaling her shift into global pop superstardom.",
     answer: "Taylor Swift",
-    points: 2
+    points: 2,
+    flag: 'must'
   }
 
 ];
