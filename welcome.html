@@ -12,9 +12,11 @@
       --bg:       #0c0c0c;
       --gold:     #c9a84c;
       --gold-dim: #7a6228;
+      --gold-pale:#1a1500;
       --text:     #f0ead8;
       --muted:    #888070;
       --rule:     #2a2520;
+      --surface:  #141210;
     }
 
     html, body {
@@ -25,54 +27,184 @@
       overflow: hidden;
     }
 
-    /* ── Outer frame ── */
+    /* ── Page shell ── */
     .page {
       width: 100vw;
       height: 100vh;
       display: grid;
-      grid-template-columns: 1fr 2px 1.6fr 2px 1fr;
-      grid-template-rows: 1fr;
-      padding: 56px 64px;
-      gap: 0;
-    }
-
-    /* ── Dividers ── */
-    .rule-v {
-      background: var(--rule);
-      margin: 0 40px;
-      align-self: stretch;
+      grid-template-rows: auto 1fr;
     }
 
     /* ══════════════════════════
-       LEFT — QR + Join
+       HEADER
     ══════════════════════════ */
-    .col-left {
+    .header {
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: clamp(16px, 2vw, 36px);
+      padding: clamp(14px, 2vh, 24px) 60px;
+      border-bottom: 1px solid var(--rule);
+      background: linear-gradient(180deg, #111008 0%, var(--bg) 100%);
     }
 
-    .trivia-label {
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(28px, 3.8vw, 58px);
+      line-height: 1;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .header-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .header-amp {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(20px, 2.6vw, 42px);
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: clamp(28px, 4vh, 48px);
+      background: var(--rule);
+      margin: 0 clamp(8px, 1vw, 20px);
+    }
+
+    .header-sub {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .header-eyebrow {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(13px, 1.4vw, 20px);
-      letter-spacing: 6px;
+      font-size: clamp(9px, 0.9vw, 13px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .header-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: clamp(11px, 1.1vw, 17px);
+      letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--gold);
     }
 
+    /* ══════════════════════════
+       BODY — Three columns
+    ══════════════════════════ */
+    .body {
+      display: grid;
+      grid-template-columns: 1fr 2px 1fr 2px 1fr;
+      min-height: 0;
+    }
+
+    .rule-v {
+      background: var(--rule);
+    }
+
+    /* ── Shared column ── */
+    .col {
+      padding: clamp(20px, 3vh, 40px) clamp(24px, 2.5vw, 48px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════
+       LEFT — Drinks
+    ══════════════════════════ */
+    .drinks-kicker {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 0.85vw, 12px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: clamp(12px, 1.8vh, 22px);
+    }
+
+    .drink {
+      margin-bottom: clamp(16px, 2.5vh, 32px);
+    }
+
+    .drink:last-child { margin-bottom: 0; }
+
+    .drink-side {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 0.8vw, 11px);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .drink-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(16px, 1.7vw, 26px);
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+
+    .drink-desc {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: clamp(11px, 1.1vw, 15px);
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .drink-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: clamp(14px, 2vh, 26px) 0;
+    }
+
+    /* ══════════════════════════
+       CENTER — QR + Trivia
+    ══════════════════════════ */
+    .col-center {
+      align-items: center;
+      text-align: center;
+    }
+
+    .trivia-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 0.85vw, 12px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: clamp(10px, 1.5vh, 18px);
+    }
+
     .qr-frame {
       background: #fff;
-      padding: 16px;
+      padding: clamp(10px, 1.2vw, 18px);
       border-radius: 4px;
-      box-shadow: 0 0 40px rgba(201,168,76,0.15);
-      width: clamp(160px, 18vw, 260px);
-      height: clamp(160px, 18vw, 260px);
+      box-shadow: 0 0 40px rgba(201,168,76,0.12);
+      width: clamp(130px, 16vw, 220px);
+      height: clamp(130px, 16vw, 220px);
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: clamp(12px, 1.8vh, 20px);
     }
 
     .qr-frame img {
@@ -85,141 +217,70 @@
     .scan-label {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(11px, 1.1vw, 16px);
+      font-size: clamp(9px, 0.85vw, 12px);
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--muted);
+      margin-bottom: clamp(14px, 2vh, 24px);
     }
 
-    /* ══════════════════════════
-       CENTER — Title
-    ══════════════════════════ */
-    .col-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0 20px;
-    }
-
-    .eyebrow {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(11px, 1.1vw, 16px);
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-
-    .main-title {
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-size: clamp(48px, 6.5vw, 100px);
-      letter-spacing: -1px;
-      color: var(--text);
-      text-transform: uppercase;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.06em;
-    }
-
-    .main-title span,
-    .main-title em {
-      line-height: 1;
-      display: block;
-    }
-
-    .main-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .main-title .amp {
-      font-size: 0.52em;
-      font-style: italic;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .title-rule {
-      width: 60px;
-      height: 2px;
+    .trivia-rule {
+      width: 40px;
+      height: 1px;
       background: var(--gold-dim);
-      margin: 28px auto;
+      margin: 0 auto clamp(12px, 1.8vh, 20px);
     }
 
-    .subtitle {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(13px, 1.4vw, 22px);
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 36px;
-    }
-
-    .welcome-text {
+    .trivia-note {
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: clamp(16px, 1.8vw, 28px);
+      font-size: clamp(13px, 1.3vw, 18px);
       color: var(--muted);
-      line-height: 1.5;
-      max-width: 420px;
-    }
-
-    .year-badge {
-      margin-top: 40px;
-      font-family: 'Oswald', sans-serif;
-      font-weight: 700;
-      font-size: clamp(11px, 1vw, 15px);
-      letter-spacing: 5px;
-      color: var(--gold-dim);
-      text-transform: uppercase;
-      border: 1px solid var(--gold-dim);
-      padding: 6px 20px;
-      border-radius: 2px;
+      line-height: 1.55;
+      max-width: 260px;
     }
 
     /* ══════════════════════════
-       RIGHT — Record write-up
+       RIGHT — Record
     ══════════════════════════ */
-    .col-right {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-left: 4px;
-    }
-
     .record-kicker {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(10px, 1vw, 14px);
+      font-size: clamp(9px, 0.85vw, 12px);
       letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 18px;
+      margin-bottom: clamp(8px, 1.2vh, 14px);
     }
 
     .record-title {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
-      font-size: clamp(18px, 2.2vw, 34px);
+      font-size: clamp(17px, 2vw, 30px);
       line-height: 1.2;
       color: var(--text);
-      margin-bottom: 20px;
+      padding-bottom: clamp(12px, 1.6vh, 18px);
       border-bottom: 1px solid var(--rule);
-      padding-bottom: 20px;
+      margin-bottom: clamp(12px, 1.6vh, 18px);
+    }
+
+    .record-meta {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 0.8vw, 11px);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: clamp(12px, 1.6vh, 18px);
     }
 
     .record-body {
       font-family: 'Inter', sans-serif;
       font-weight: 300;
-      font-size: clamp(13px, 1.3vw, 18px);
-      line-height: 1.75;
+      font-size: clamp(11px, 1.1vw, 15px);
+      line-height: 1.72;
       color: var(--muted);
+      margin-bottom: clamp(10px, 1.4vh, 16px);
     }
 
     .record-body strong {
@@ -229,44 +290,101 @@
   </style>
 </head>
 <body>
-  <div class="page">
+<div class="page">
 
-    <!-- LEFT: QR + Join -->
-    <div class="col-left">
-      <div class="trivia-label">Trivia</div>
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-title">Booze</div>
+    <div class="header-amp">&amp;</div>
+    <div class="header-title"><em>Vinyl</em></div>
+    <div class="header-divider"></div>
+    <div class="header-sub">
+      <div class="header-eyebrow">Tonight's edition</div>
+      <div class="header-label">Iconic Albums</div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-sub">
+      <div class="header-eyebrow">Year</div>
+      <div class="header-label">2026</div>
+    </div>
+  </header>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+
+    <!-- LEFT: Drinks -->
+    <div class="col">
+      <div class="drinks-kicker">Tonight's Cocktails</div>
+
+      <div class="drink">
+        <div class="drink-side">Side A</div>
+        <div class="drink-name">McNicks Spritz</div>
+        <div class="drink-desc">
+          Named for Stevie Nicks, who famously admitted in interviews
+          she'd drink both tequila <em>and</em> wine. This cocktail refuses
+          to choose — a citrusy tequila-and-white-wine spritz that combines
+          the best of both worlds.
+        </div>
+      </div>
+
+      <hr class="drink-rule">
+
+      <div class="drink">
+        <div class="drink-side">Side B</div>
+        <div class="drink-name">Black Velvet</div>
+        <div class="drink-desc">
+          Inspired by Stevie's iconic West Village look — layered fabrics,
+          fringe, and crushed velvet. Two ingredients, two very different
+          worlds: a Champagne flute of Guinness topped with dry sparkling
+          wine. Dark, elegant, and unexpectedly bubbly.
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-v"></div>
+
+    <!-- CENTER: QR + Trivia -->
+    <div class="col col-center">
+      <div class="trivia-eyebrow">Join the Game</div>
       <div class="qr-frame">
-        <img src="qr-code.png" alt="Scan to join">
+        <img src="qr-code.png" alt="Scan to join trivia">
       </div>
       <div class="scan-label">Scan to join</div>
+      <div class="trivia-rule"></div>
+      <div class="trivia-note">
+        Trivia starts after<br>the first record ends.
+      </div>
     </div>
 
-    <!-- Divider -->
     <div class="rule-v"></div>
 
-    <!-- CENTER: Title -->
-    <div class="col-center">
-      <div class="eyebrow">Welcome to</div>
-      <div class="main-title"><span>Booze</span><span class="amp">&amp;</span><em>Vinyl</em></div>
-      <div class="title-rule"></div>
-      <div class="subtitle">Iconic Albums</div>
-      <div class="year-badge">2026</div>
-    </div>
-
-    <!-- Divider -->
-    <div class="rule-v"></div>
-
-    <!-- RIGHT: Record write-up -->
-    <div class="col-right">
+    <!-- RIGHT: Record -->
+    <div class="col">
       <div class="record-kicker">Tonight's Record</div>
       <div class="record-title">Fleetwood Mac &mdash; Rumours (1977)</div>
+      <div class="record-meta">Pop Rock &nbsp;·&nbsp; Warner Bros. &nbsp;·&nbsp; Producers: Ken Caillat, Richard Dashut &amp; Fleetwood Mac</div>
+
       <div class="record-body">
         Recorded while the band was falling apart in real time &mdash; two couples
         breaking up simultaneously, everyone furious at everyone else. The result was
-        <strong>11 tracks of pop perfection.</strong> Over 40 million
-        copies sold. <strong>Chaos is productive.</strong>
+        <strong>11 tracks of pop perfection.</strong> Over 40 million copies sold.
+        <strong>Chaos is productive.</strong>
+      </div>
+
+      <div class="record-body">
+        Their eleventh studio album proved to be the band's enduring masterpiece &mdash;
+        it snagged a Grammy and became the fastest-selling LP of all time. Produced
+        with smooth electric and acoustic guitar, it comes easy on the ears even as
+        the lyrics quietly devastate. This is <strong>peak Fleetwood Mac</strong>:
+        the oh-so-pleasant soundtrack to your life falling apart.
+      </div>
+
+      <div class="record-body">
+        <em>When to spin:</em> Tarot-reading night. Beaded curtains optional but encouraged.
       </div>
     </div>
 
   </div>
+</div>
 </body>
 </html>
