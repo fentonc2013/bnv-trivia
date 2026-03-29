@@ -404,7 +404,7 @@ function buildRoundEnd() {
             </div>`).join('')}
           ${sorted.length === 0 ? '<p class="text-muted text-center">No scores yet</p>' : ''}
         </div>
-        ${round < 2 ? '<p class="waiting-text mt-24">⏳ Round 2 starting soon…</p>' : ''}
+        ${round < 2 ? '<p class="text-muted text-center text-sm mt-24">Come back for Round 2 later!</p>' : ''}
       </div>
     </div>`;
 }

@@ -531,9 +531,10 @@ body {
 .admin-content {
   flex: 1;
   padding: 16px;
-  max-width: 640px;
+  max-width: 560px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .state-badge {
@@ -597,8 +598,11 @@ body {
   transition: border-color var(--transition);
 }
 
-.answer-row.marked-correct  { border-color: var(--success); background: var(--success-pale); }
-.answer-row.marked-incorrect { border-color: var(--danger);  background: var(--danger-pale); }
+.answer-row.marked-correct  { border-color: var(--border); background: var(--surface-2); }
+.answer-row.marked-incorrect { border-color: var(--border); background: var(--surface-2); }
+
+.mark-btn.correct  { background: var(--success); border-color: var(--success); color: #000; font-weight: 700; }
+.mark-btn.incorrect { background: var(--danger);  border-color: var(--danger);  color: #fff; font-weight: 700; }
 
 .answer-info { flex: 1; min-width: 0; }
 
@@ -634,8 +638,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.mark-btn.correct  { background: var(--success-pale); border-color: var(--success); }
-.mark-btn.incorrect { background: var(--danger-pale);  border-color: var(--danger); }
 .mark-btn:hover { border-color: var(--gold-dim); }
 
 .correct-answer-ref {
