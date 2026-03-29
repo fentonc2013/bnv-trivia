@@ -117,10 +117,19 @@
       font-family: 'Playfair Display', serif;
       font-weight: 900;
       font-size: clamp(48px, 6.5vw, 100px);
-      line-height: 0.92;
       letter-spacing: -1px;
       color: var(--text);
       text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.06em;
+    }
+
+    .main-title span,
+    .main-title em {
+      line-height: 1;
+      display: block;
     }
 
     .main-title em {
@@ -129,11 +138,10 @@
     }
 
     .main-title .amp {
-      font-size: 0.55em;
+      font-size: 0.52em;
       font-style: italic;
       color: var(--gold);
-      display: block;
-      line-height: 1.1;
+      line-height: 1;
     }
 
     .title-rule {
@@ -238,7 +246,7 @@
     <!-- CENTER: Title -->
     <div class="col-center">
       <div class="eyebrow">Welcome to</div>
-      <div class="main-title">Booze<br><span class="amp">&amp;</span><br><em>Vinyl</em></div>
+      <div class="main-title"><span>Booze</span><span class="amp">&amp;</span><em>Vinyl</em></div>
       <div class="title-rule"></div>
       <div class="subtitle">Iconic Albums</div>
       <div class="year-badge">2026</div>
