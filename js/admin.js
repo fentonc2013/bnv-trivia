@@ -191,8 +191,8 @@ async function applyScores() {
   await db.ref(`trivia/scoring/${key}`).set(A.markings);
 
   A.scoringApplied = true;
-  toast('Scores applied! ✓', 'success');
-  render();
+  toast('Scores applied! Advancing…', 'success');
+  await nextQuestion();
 }
 
 async function nextQuestion() {
@@ -454,10 +454,7 @@ function buildScoringTab(q, key, state) {
           ${A.scoringApplied || Object.keys(A.markings).length === 0 ? 'disabled' : ''}>
           Apply Scores (${Object.keys(A.markings).length}/${playerIds.length} marked)
         </button>
-        ${A.scoringApplied
-          ? `<button class="btn btn-gold mt-8" onclick="nextQuestion()">→ Next Question / End Round</button>`
-          : `<button class="btn btn-outline mt-8" onclick="nextQuestion()">→ Skip &amp; Next (no scores)</button>`}
-        <p class="text-muted text-sm text-center mt-8">Players not marked get 0 for this question.</p>`}
+        <p class="text-muted text-sm text-center mt-8">Players not marked get 0. Scores apply and game advances automatically.</p>`}
   `;
 }
 
