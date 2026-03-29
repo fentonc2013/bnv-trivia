@@ -344,18 +344,6 @@ function buildQuestion() {
           <span class="question-number">Question ${qNum} of ${total}</span>
         </div>
 
-        <div class="timer-wrap">
-          <div class="timer-circle">
-            <svg class="timer-svg" viewBox="0 0 72 72">
-              <circle class="timer-track" cx="36" cy="36" r="30"/>
-              <circle class="timer-bar" cx="36" cy="36" r="30"
-                style="stroke-dashoffset:${initOffset}"
-                id="timer-bar-el"/>
-            </svg>
-            <div class="timer-number${initSecs <= 10 ? ' urgent' : ''}" id="timer-num-el">${initSecs}</div>
-          </div>
-        </div>
-
         <div class="card gold-border mb-16">
           <p class="question-text">${esc(q.question)}</p>
           <textarea class="form-input answer-input" id="answer-input"
@@ -367,6 +355,18 @@ function buildQuestion() {
           Submit Answer ✓
         </button>
         <p class="text-center text-sm text-muted mt-8">You can't change your answer after submitting.</p>
+
+        <div class="timer-wrap" style="margin-top:20px;margin-bottom:0">
+          <div class="timer-circle">
+            <svg class="timer-svg" viewBox="0 0 72 72">
+              <circle class="timer-track" cx="36" cy="36" r="30"/>
+              <circle class="timer-bar" cx="36" cy="36" r="30"
+                style="stroke-dashoffset:${initOffset}"
+                id="timer-bar-el"/>
+            </svg>
+            <div class="timer-number${initSecs <= 10 ? ' urgent' : ''}" id="timer-num-el">${initSecs}</div>
+          </div>
+        </div>
       </div>
     </div>`;
 }
