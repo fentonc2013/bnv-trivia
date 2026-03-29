@@ -217,6 +217,13 @@ const QUESTIONS = [
     question: "Nirvana, Pearl Jam, Alice in Chains, and Soundgarden were all defining bands of the 90s grunge scene — but only three of them recorded iconic MTV Unplugged sessions. Which one never did?",
     answer: "Soundgarden",
     points: 2
+  },
+  {
+    id: 'q30',
+    round: 2,
+    question: "In 2008, this artist released \"Love Story,\" a re-telling of Romeo and Juliet that became the first country song in history to top the Mainstream Top 40 chart, signaling her shift into global pop superstardom.",
+    answer: "Taylor Swift",
+    points: 2
   }
 
 ];
