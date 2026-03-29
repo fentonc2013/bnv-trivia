@@ -4,12 +4,13 @@
 
 // --- State ---
 const S = {
-  view:       'password',   // password | join | lobby | question | submitted | roundEnd | gameEnd
+  view:       'password',   // password | join | lobby | question | submitted | questionResults | roundEnd | gameEnd
   playerId:   null,
   playerName: null,
   game:       null,         // live game object from Firebase
   players:    {},           // all players
   myAnswer:   null,         // submitted answer for current question key
+  myResult:   null,         // true/false/null after question is scored
   answerCount: 0,           // how many players have answered current question
   timerInterval: null,
   prevQuestionKey: null,    // detect when question changes
@@ -209,6 +210,7 @@ function handleGameState(prev) {
   // Detect question change — reset answer
   if (newKey !== S.prevQuestionKey) {
     S.myAnswer = null;
+    S.myResult = null;
     S.answerCount = 0;
     S.prevQuestionKey = newKey;
   }
@@ -253,6 +255,20 @@ function handleGameState(prev) {
       clearTimer();
       S.view = 'submitted';
       break;
+    case 'question_results': {
+      clearTimer();
+      const key = currentQuestionKey();
+      Promise.all([
+        db.ref(`trivia/scoring/${key}/${S.playerId}`).once('value'),
+        S.myAnswer ? Promise.resolve(null) : db.ref(`trivia/answers/${key}/${S.playerId}`).once('value'),
+      ]).then(([scoreSnap, answerSnap]) => {
+        S.myResult = scoreSnap.val();
+        if (answerSnap?.val()) S.myAnswer = answerSnap.val();
+        S.view = 'questionResults';
+        render();
+      });
+      return;
+    }
     case 'round_end':
       clearTimer();
       S.view = 'roundEnd';
@@ -273,8 +289,9 @@ function buildView() {
     case 'join':      return buildJoin();
     case 'lobby':     return buildLobby();
     case 'question':  return buildQuestion();
-    case 'submitted': return buildSubmitted();
-    case 'roundEnd':  return buildRoundEnd();
+    case 'submitted':        return buildSubmitted();
+    case 'questionResults':  return buildQuestionResults();
+    case 'roundEnd':         return buildRoundEnd();
     case 'gameEnd':   return buildGameEnd();
     default: return '';
   }
@@ -406,6 +423,34 @@ function buildSubmitted() {
             return '<p class="waiting-text">🎉 Everyone answered — waiting for host to close…</p>';
           return `<p class="waiting-text">⏳ Waiting for other players… (${S.answerCount}/${total})</p>`;
         })()}
+      </div>
+    </div>`;
+}
+
+function buildQuestionResults() {
+  const q = currentQuestion();
+  const correct = S.myResult === true;
+  const didAnswer = S.myAnswer !== null;
+
+  return `
+    <div class="screen">
+      <div class="card gold-border" style="max-width:400px;width:100%">
+        <div style="text-align:center;font-size:48px;margin-bottom:8px">${
+          !didAnswer ? '🤷' : correct ? '✅' : '❌'
+        }</div>
+        <div class="auth-title">${
+          !didAnswer ? 'No answer submitted' : correct ? 'Correct!' : 'Not quite!'
+        }</div>
+        ${didAnswer ? `
+          <div class="submitted-box" style="margin-top:16px">
+            <div class="submitted-label">Your answer</div>
+            <div class="submitted-answer" style="color:${correct ? 'var(--success)' : 'var(--danger)'}">${esc(S.myAnswer)}</div>
+          </div>` : ''}
+        <div class="result-answer-box">
+          <div class="submitted-label">Correct answer</div>
+          <div class="result-correct-text">${esc(q?.answer || '—')}</div>
+        </div>
+        <p class="waiting-text mt-16">⏳ Next question coming up…</p>
       </div>
     </div>`;
 }

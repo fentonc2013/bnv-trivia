@@ -199,8 +199,9 @@ async function applyScores() {
   await db.ref(`trivia/scoring/${key}`).set(A.markings);
 
   A.scoringApplied = true;
-  toast('Scores applied! Advancing…', 'success');
-  await nextQuestion();
+  toast('Scores applied! Showing results to players…', 'success');
+  await gameRef.update({ state: 'question_results' });
+  setTimeout(() => nextQuestion(), 7000);
 }
 
 async function nextQuestion() {
@@ -389,6 +390,9 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
 
       ${state === 'scoring' ? `
         <button class="btn btn-gold" onclick="setTab('scoring')">✏️ Go to Scoring Tab</button>` : ''}
+
+      ${state === 'question_results' ? `
+        <p class="text-muted text-sm text-center">Showing results to players… next question opens automatically.</p>` : ''}
 
       ${state === 'round_end' ? `
         ${round < 2

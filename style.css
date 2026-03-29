@@ -454,6 +454,22 @@ body {
   color: var(--gold);
 }
 
+.result-answer-box {
+  background: var(--gold-pale);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.result-correct-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: 4px;
+}
+
 .waiting-text {
   font-size: 14px;
   color: var(--text-muted);
