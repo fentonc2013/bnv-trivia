@@ -138,16 +138,14 @@ const QUESTIONS = [
     round: 1,
     question: "This former member of Destiny's Child collaborated with Nelly on \"Dilemma,\" a 2002 duet that went on to win the Grammy for Best Rap/Sung Collaboration.",
     answer: "Kelly Rowland",
-    points: 2,
-    flag: 'must'
+    points: 2
   },
   {
     id: 'q18',
     round: 1,
     question: "This legendary guitarist, who first rose to fame in the 1960s, made a comeback with his 1999 album \"Supernatural\" — featuring collaborations with Rob Thomas and Everlast — and swept the Grammys winning 9 in a single night.",
     answer: "Santana",
-    points: 2,
-    flag: 'must'
+    points: 2
   },
   {
     id: 'q19',
@@ -269,7 +267,7 @@ function generateQuestionOrder() {
   const twos = shuffle([...mustTwos, ...normalTwos]);
 
   return {
-    r1: shuffle([...ones.slice(0, 5),  ...twos.slice(0, 6)]),
-    r2: shuffle([...ones.slice(5, 10), ...twos.slice(6, 12)]),
+    r1: shuffle([...ones.slice(0, 5),  ...twos.slice(0, 5)]),
+    r2: shuffle([...ones.slice(5, 10), ...twos.slice(5, 10)]),
   };
 }
