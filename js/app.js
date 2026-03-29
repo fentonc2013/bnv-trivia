@@ -219,6 +219,16 @@ function handleGameState(prev) {
     case 'lobby':
       clearTimer();
       S.view = 'lobby';
+      // Auto-re-register if player record was deleted (e.g. after admin reset)
+      if (S.playerName && S.playerId && !S.players[S.playerId]) {
+        db.ref(`trivia/players/${S.playerId}`).set({
+          name:        S.playerName,
+          score:       0,
+          round1Score: 0,
+          round2Score: 0,
+          joinedAt:    Date.now(),
+        });
+      }
       break;
     case 'question_active':
       // already answered
