@@ -40,7 +40,10 @@ function render() {
 }
 
 function roundQuestions(round) {
-  return QUESTIONS.filter(q => q.round === round);
+  if (!A.game) return [];
+  const ids = round === 1 ? A.game.r1Questions : A.game.r2Questions;
+  if (ids) return ids.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean);
+  return QUESTIONS.filter(q => q.round === round); // fallback for legacy game state
 }
 
 function currentQuestion() {
@@ -120,8 +123,13 @@ function loadAnswers(key) {
 // --- Game Controls ---
 async function resetGame() {
   if (!confirm('Reset the entire game? This clears all players, answers, and scores.')) return;
+  const order = generateQuestionOrder();
   await db.ref('trivia').set({
-    game: { state: 'lobby', round: 1, questionIndex: 0, questionEndTime: 0 },
+    game: {
+      state: 'lobby', round: 1, questionIndex: 0, questionEndTime: 0,
+      r1Questions: order.r1,
+      r2Questions: order.r2,
+    },
     players: null,
     answers: null,
     scoring: null,

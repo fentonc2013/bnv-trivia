@@ -46,13 +46,16 @@ function render() {
   document.getElementById('root').innerHTML = buildView();
 }
 
-function currentQuestion() {
-  if (!S.game) return null;
-  return QUESTIONS.find(q => q.round === S.game.round && QUESTIONS.filter(x => x.round === S.game.round).indexOf(q) === S.game.questionIndex) || null;
+function roundQuestions(round) {
+  if (!S.game) return [];
+  const ids = round === 1 ? S.game.r1Questions : S.game.r2Questions;
+  if (ids) return ids.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean);
+  return QUESTIONS.filter(q => q.round === round); // fallback for legacy game state
 }
 
-function roundQuestions(round) {
-  return QUESTIONS.filter(q => q.round === round);
+function currentQuestion() {
+  if (!S.game) return null;
+  return roundQuestions(S.game.round)[S.game.questionIndex] ?? null;
 }
 
 function currentQuestionKey() {
