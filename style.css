@@ -348,6 +348,25 @@ body {
   color: var(--text-muted);
 }
 
+.points-badge {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 99px;
+  padding: 4px 12px;
+}
+.points-1 {
+  background: var(--surface-3);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.points-2 {
+  background: var(--gold-pale);
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+}
+
 .question-text {
   font-size: 20px;
   font-weight: 600;

@@ -356,6 +356,7 @@ function buildQuestion() {
         <div class="question-meta">
           <span class="question-round-label">Round ${S.game.round}</span>
           <span class="question-number">Question ${qNum} of ${total}</span>
+          <span class="points-badge points-${q.points}">${q.points} pt${q.points !== 1 ? 's' : ''}</span>
         </div>
 
         <div class="card gold-border mb-16">
