@@ -19,12 +19,12 @@
 
     html, body { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
 
-    /* ── Page: header / body / footer ── */
+    /* ── Page: header / qr / body ── */
     .page {
       width: 100vw;
       height: 100vh;
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto auto 1fr;
     }
 
     /* ══════════════════════════
@@ -84,9 +84,9 @@
       padding: clamp(24px, 3.5vh, 48px) clamp(32px, 3.5vw, 60px);
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      text-align: center;
+      text-align: left;
       overflow: hidden;
     }
 
@@ -114,18 +114,7 @@
       padding-bottom: clamp(12px, 1.6vh, 18px);
       border-bottom: 1px solid var(--rule);
       margin-bottom: clamp(10px, 1.4vh, 16px);
-      max-width: 480px;
       width: 100%;
-    }
-
-    .record-meta {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(9px, 0.8vw, 11px);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold-dim);
-      margin-bottom: clamp(14px, 1.8vh, 22px);
     }
 
     .record-body {
@@ -189,21 +178,20 @@
       border-top: 1px solid var(--rule);
       width: 100%;
       max-width: 400px;
-      margin: clamp(14px, 2vh, 24px) auto;
+      margin: clamp(14px, 2vh, 24px) 0;
     }
 
     /* ══════════════════════════
-       QR FOOTER
+       QR BAR (below header)
     ══════════════════════════ */
-    .footer {
+    .qr-bar {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: clamp(8px, 1vh, 14px);
+      gap: clamp(14px, 2vw, 28px);
       padding: clamp(14px, 2vh, 26px) 60px;
-      border-top: 1px solid var(--rule);
-      background: linear-gradient(0deg, #111008 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--rule);
     }
 
     .qr-label {
@@ -247,6 +235,17 @@
     <div class="header-year">2026</div>
   </header>
 
+  <!-- QR BAR -->
+  <div class="qr-bar">
+    <div class="qr-frame">
+      <img src="qr-code.png" alt="Scan to join trivia">
+    </div>
+    <div>
+      <div class="qr-label">Scan to Join Trivia</div>
+      <div class="qr-note">Trivia starts after the first record ends.</div>
+    </div>
+  </div>
+
   <!-- BODY -->
   <div class="body">
 
@@ -254,8 +253,7 @@
     <div class="col col-left">
       <div class="record-kicker">Tonight's Record</div>
       <div class="record-title">Fleetwood Mac &mdash; Rumours (1977)</div>
-      <div class="record-meta">Pop Rock &nbsp;·&nbsp; Warner Bros. &nbsp;·&nbsp; Producers: Ken Caillat, Richard Dashut &amp; Fleetwood Mac</div>
-      <div class="record-body">
+<div class="record-body">
         Recorded while the band was falling apart in real time &mdash; two couples
         breaking up simultaneously, everyone furious at everyone else. The result was
         <strong>11 tracks of pop perfection.</strong> Over 40 million copies sold.
@@ -298,14 +296,6 @@
 
   </div>
 
-  <!-- FOOTER: QR -->
-  <footer class="footer">
-    <div class="qr-label">Scan to Join Trivia</div>
-    <div class="qr-frame">
-      <img src="qr-code.png" alt="Scan to join trivia">
-    </div>
-    <div class="qr-note">Trivia starts after the first record ends.</div>
-  </footer>
 
 </div>
 </body>
