@@ -130,7 +130,7 @@ const QUESTIONS = [
   {
     id: 'q17',
     round: 1,
-    question: "This former Destiny's Child member collaborated with Nelly on \"Dilemma,\" a 2002 duet that went on to win the Grammy for Best Rap/Sung Collaboration.",
+    question: "This former member of Destiny's Child collaborated with Nelly on \"Dilemma,\" a 2002 duet that went on to win the Grammy for Best Rap/Sung Collaboration.",
     answer: "Kelly Rowland",
     points: 2
   },
@@ -151,75 +151,68 @@ const QUESTIONS = [
   {
     id: 'q20',
     round: 2,
-    question: "This rapper was shot 9 times in 2000, with Dr. Dre handling production on his debut, and whose highly publicized beef with Ja Rule helped catapult him to mainstream stardom in the early 2000s.",
-    answer: "50 Cent",
-    points: 2
-  },
-  {
-    id: 'q21',
-    round: 2,
     question: "This Atlanta R&B artist's 2004 album \"Confessions\" spent 9 weeks at #1 and produced four number one singles — still one of the best selling albums of the 2000s.",
     answer: "Usher",
     points: 2
   },
   {
-    id: 'q22',
+    id: 'q21',
     round: 2,
     question: "In 2003, this jazz-pop singer made history by winning 8 Grammys in a single night for her debut album Come Away with Me.",
     answer: "Norah Jones",
     points: 2
   },
   {
-    id: 'q23',
+    id: 'q22',
     round: 2,
     question: "This New York City band's 2001 debut Is This It is widely credited with sparking the indie rock revival of the early 2000s.",
     answer: "The Strokes",
     points: 2
   },
   {
-    id: 'q24',
+    id: 'q23',
     round: 2,
     question: "This alternative metal band, whose four members are all of Armenian descent, released the 2002 platinum-certified record Steal This Album! — featuring a cover designed to look like a hand-written, burned CD.",
     answer: "System of a Down",
     points: 2
   },
   {
-    id: 'q25',
+    id: 'q24',
     round: 2,
     question: "This \"virtual band\" was created by Damon Albarn, frontman of Blur, and featured animated characters in all their music videos — including the one for their breakout hit \"Clint Eastwood.\"",
     answer: "Gorillaz",
     points: 2
   },
   {
-    id: 'q26',
+    id: 'q25',
     round: 2,
     question: "Which member of TLC was both married to an NFL player and arrested for arson for burning down the house they once lived in?",
     answer: "Lisa Lopes / Left Eye",
     points: 2
   },
   {
-    id: 'q27',
+    id: 'q26',
     round: 2,
     question: "Finish this Sublime lyric from \"What I Got\": \"Early in the morning, rising to the street, light me up that cigarette and I _____\"",
     answer: "strap shoes on my feet",
     points: 2
   },
   {
-    id: 'q28',
+    id: 'q27',
     round: 2,
     question: "This female artist, from a famous musical family, has a catalog of hit songs across multiple decades including \"What Have You Done For Me Lately\" (1986), \"That's the Way Love Goes\" (1993), and \"All for You\" (2001). Who is she?",
     answer: "Janet Jackson",
     points: 2
   },
   {
-    id: 'q29',
+    id: 'q28',
     round: 2,
     question: "Three of these four bands performed at Woodstock 99 — Korn, Limp Bizkit, Linkin Park, Rage Against the Machine. Which one wasn't there?",
     answer: "Linkin Park",
     points: 2
   },
   {
-    id: 'q30',
+    id: 'q29',
     round: 2,
     question: "Nirvana, Pearl Jam, Alice in Chains, and Soundgarden were all defining bands of the 90s grunge scene — but only three of them recorded iconic MTV Unplugged sessions. Which one never did?",
     answer: "Soundgarden",
