@@ -201,7 +201,7 @@ async function applyScores() {
   A.scoringApplied = true;
   toast('Scores applied! Showing results to players…', 'success');
   await gameRef.update({ state: 'question_results' });
-  setTimeout(() => nextQuestion(), 7000);
+  setTimeout(() => nextQuestion(), 10000);
 }
 
 async function nextQuestion() {
