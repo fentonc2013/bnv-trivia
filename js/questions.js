@@ -229,6 +229,9 @@ const QUESTIONS = [
 ];
 
 // Randomly assign questions to rounds: 5×1pt + 6×2pt per round, no repeats.
+// Optional per-question flags:
+//   flag: 'must'  — always included somewhere in the game (round 1 or 2)
+//   flag: 'skip'  — never included
 // Called at game reset; result is stored in Firebase so all clients see the same order.
 function generateQuestionOrder() {
   function shuffle(arr) {
@@ -239,10 +242,19 @@ function generateQuestionOrder() {
     }
     return a;
   }
-  const ones = shuffle(QUESTIONS.filter(q => q.points === 1).map(q => q.id));
-  const twos = shuffle(QUESTIONS.filter(q => q.points === 2).map(q => q.id));
-  // Round 1: first 5 ones + first 6 twos (shuffled together)
-  // Round 2: next 5 ones + next 6 twos (shuffled together)
+
+  const available = QUESTIONS.filter(q => q.flag !== 'skip');
+
+  // Must-ask questions go to the front of each pool before shuffling normals in
+  const mustOnes   = available.filter(q => q.points === 1 && q.flag === 'must').map(q => q.id);
+  const normalOnes = shuffle(available.filter(q => q.points === 1 && q.flag !== 'must').map(q => q.id));
+  const mustTwos   = available.filter(q => q.points === 2 && q.flag === 'must').map(q => q.id);
+  const normalTwos = shuffle(available.filter(q => q.points === 2 && q.flag !== 'must').map(q => q.id));
+
+  // Shuffle must + normal together so must questions are spread across both rounds
+  const ones = shuffle([...mustOnes, ...normalOnes]);
+  const twos = shuffle([...mustTwos, ...normalTwos]);
+
   return {
     r1: shuffle([...ones.slice(0, 5),  ...twos.slice(0, 6)]),
     r2: shuffle([...ones.slice(5, 10), ...twos.slice(6, 12)]),
