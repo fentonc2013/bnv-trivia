@@ -10,6 +10,7 @@ const S = {
   game:       null,         // live game object from Firebase
   players:    {},           // all players
   myAnswer:   null,         // submitted answer for current question key
+  answerCount: 0,           // how many players have answered current question
   timerInterval: null,
   prevQuestionKey: null,    // detect when question changes
 };
@@ -184,6 +185,15 @@ function initFirebase() {
   playersRef.on('value', snap => {
     S.players = snap.val() || {};
     if (['lobby','roundEnd','gameEnd'].includes(S.view)) render();
+    // Re-check all-answered if on submitted view
+    if (S.view === 'submitted') render();
+  });
+
+  answersRef.on('value', snap => {
+    const key = currentQuestionKey();
+    const keyAnswers = (snap.val() || {})[key] || {};
+    S.answerCount = Object.keys(keyAnswers).length;
+    if (S.view === 'submitted') render();
   });
 }
 
@@ -199,6 +209,7 @@ function handleGameState(prev) {
   // Detect question change — reset answer
   if (newKey !== S.prevQuestionKey) {
     S.myAnswer = null;
+    S.answerCount = 0;
     S.prevQuestionKey = newKey;
   }
 
@@ -386,9 +397,14 @@ function buildSubmitted() {
           <div class="submitted-label">Your answer</div>
           <div class="submitted-answer">${esc(S.myAnswer || '—')}</div>
         </div>
-        ${state === 'scoring'
-          ? '<p class="waiting-text">⚖️ Host is scoring answers…</p>'
-          : '<p class="waiting-text">⏳ Waiting for other players…</p>'}
+        ${(() => {
+          const total = Object.keys(S.players).length;
+          if (state === 'scoring' || state === 'question_closed')
+            return '<p class="waiting-text">⚖️ All answers in — host is scoring…</p>';
+          if (S.answerCount >= total && total > 0)
+            return '<p class="waiting-text">🎉 Everyone answered — waiting for host to close…</p>';
+          return `<p class="waiting-text">⏳ Waiting for other players… (${S.answerCount}/${total})</p>`;
+        })()}
       </div>
     </div>`;
 }

@@ -13,4 +13,4 @@ const FIREBASE_CONFIG = {
 const ADMIN_PASSWORD  = "Tr1viaT1me";
 const PLAYER_PASSWORD = "bnv2026";
 const GAME_NAME             = "BNV Music Trivia 2026";
-const QUESTION_TIME_SECONDS = 30;
+const QUESTION_TIME_SECONDS = 45;
