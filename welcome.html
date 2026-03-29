@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BNV Music Trivia 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Oswald:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0c0c0c;
+      --gold:     #c9a84c;
+      --gold-dim: #7a6228;
+      --text:     #f0ead8;
+      --muted:    #888070;
+      --rule:     #2a2520;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Outer frame ── */
+    .page {
+      width: 100vw;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 2px 1.6fr 2px 1fr;
+      grid-template-rows: 1fr;
+      padding: 56px 64px;
+      gap: 0;
+    }
+
+    /* ── Dividers ── */
+    .rule-v {
+      background: var(--rule);
+      margin: 0 40px;
+      align-self: stretch;
+    }
+
+    /* ══════════════════════════
+       LEFT — QR + Join
+    ══════════════════════════ */
+    .col-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .trivia-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(13px, 1.4vw, 20px);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .qr-frame {
+      background: #fff;
+      padding: 16px;
+      border-radius: 4px;
+      box-shadow: 0 0 40px rgba(201,168,76,0.15);
+      width: clamp(160px, 18vw, 260px);
+      height: clamp(160px, 18vw, 260px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .scan-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(11px, 1.1vw, 16px);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ══════════════════════════
+       CENTER — Title
+    ══════════════════════════ */
+    .col-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(11px, 1.1vw, 16px);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .main-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(48px, 6.5vw, 100px);
+      line-height: 0.92;
+      letter-spacing: -1px;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .main-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .title-rule {
+      width: 60px;
+      height: 2px;
+      background: var(--gold-dim);
+      margin: 28px auto;
+    }
+
+    .subtitle {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(13px, 1.4vw, 22px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .welcome-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(16px, 1.8vw, 28px);
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 420px;
+    }
+
+    .year-badge {
+      margin-top: 40px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(11px, 1vw, 15px);
+      letter-spacing: 5px;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      border: 1px solid var(--gold-dim);
+      padding: 6px 20px;
+      border-radius: 2px;
+    }
+
+    /* ══════════════════════════
+       RIGHT — Record write-up
+    ══════════════════════════ */
+    .col-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 4px;
+    }
+
+    .record-kicker {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(10px, 1vw, 14px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .record-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(18px, 2.2vw, 34px);
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 20px;
+    }
+
+    .record-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: clamp(13px, 1.3vw, 18px);
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .record-body strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- LEFT: QR + Join -->
+    <div class="col-left">
+      <div class="trivia-label">Trivia</div>
+      <div class="qr-frame">
+        <img src="qr-code.png" alt="Scan to join">
+      </div>
+      <div class="scan-label">Scan to join</div>
+    </div>
+
+    <!-- Divider -->
+    <div class="rule-v"></div>
+
+    <!-- CENTER: Title -->
+    <div class="col-center">
+      <div class="eyebrow">Welcome to</div>
+      <div class="main-title">BNV<br><em>Music</em><br>Trivia</div>
+      <div class="title-rule"></div>
+      <div class="subtitle">Grab your phone &amp; join the game</div>
+      <div class="welcome-text">Two rounds. Twenty questions.<br>One winner takes the night.</div>
+      <div class="year-badge">2026</div>
+    </div>
+
+    <!-- Divider -->
+    <div class="rule-v"></div>
+
+    <!-- RIGHT: Record write-up -->
+    <div class="col-right">
+      <div class="record-kicker">Tonight's Record</div>
+      <div class="record-title">Fleetwood Mac &mdash; Rumours (1977)</div>
+      <div class="record-body">
+        Recorded while the band was falling apart in real time &mdash; two couples
+        breaking up simultaneously, everyone furious at everyone else. The result was
+        <strong>11 tracks of devastating pop perfection.</strong> Over 40 million
+        copies sold. <strong>Chaos is productive.</strong>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
