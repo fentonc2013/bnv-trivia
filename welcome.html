@@ -12,37 +12,31 @@
       --bg:       #0c0c0c;
       --gold:     #c9a84c;
       --gold-dim: #7a6228;
-      --gold-pale:#1a1500;
       --text:     #f0ead8;
       --muted:    #888070;
       --rule:     #2a2520;
     }
 
-    html, body {
-      width: 100%; height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      overflow: hidden;
-    }
+    html, body { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
 
+    /* ── Page: header / body / footer ── */
     .page {
       width: 100vw;
       height: 100vh;
       display: grid;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: auto 1fr auto;
     }
 
     /* ══════════════════════════
-       HEADER — compact stacked
+       HEADER
     ══════════════════════════ */
     .header {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      padding: clamp(10px, 1.4vh, 18px) 60px;
+      gap: 3px;
+      padding: clamp(14px, 2vh, 26px) 60px;
       border-bottom: 1px solid var(--rule);
       background: linear-gradient(180deg, #111008 0%, var(--bg) 100%);
     }
@@ -50,40 +44,35 @@
     .header-title {
       font-family: 'Playfair Display', serif;
       font-weight: 900;
-      font-size: clamp(22px, 2.8vw, 44px);
+      font-size: clamp(28px, 3.4vw, 54px);
       line-height: 1;
       color: var(--text);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .header-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
+    .header-title em { font-style: italic; color: var(--gold); }
 
     .header-sub {
       font-family: 'Oswald', sans-serif;
       font-weight: 400;
-      font-size: clamp(9px, 0.95vw, 14px);
-      letter-spacing: 5px;
+      font-size: clamp(10px, 1.05vw, 15px);
+      letter-spacing: 6px;
       text-transform: uppercase;
       color: var(--gold);
-      line-height: 1.4;
     }
 
     .header-year {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(8px, 0.8vw, 12px);
+      font-size: clamp(9px, 0.85vw, 13px);
       letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--muted);
-      line-height: 1.4;
     }
 
     /* ══════════════════════════
-       BODY — 50 / 50
+       BODY — 50/50
     ══════════════════════════ */
     .body {
       display: grid;
@@ -95,120 +84,16 @@
       padding: clamp(24px, 3.5vh, 48px) clamp(32px, 3.5vw, 60px);
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       overflow: hidden;
     }
 
-    .col-left {
-      justify-content: space-between;
-      border-right: 1px solid var(--rule);
-    }
-
-    .col-right {
-      justify-content: center;
-    }
+    .col-left  { border-right: 1px solid var(--rule); }
 
     /* ══════════════════════════
-       DRINKS
-    ══════════════════════════ */
-    .drinks-section { flex: 1; }
-
-    .drinks-kicker {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(9px, 0.85vw, 12px);
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: clamp(14px, 2vh, 24px);
-    }
-
-    .drink { margin-bottom: clamp(14px, 2vh, 26px); }
-    .drink:last-child { margin-bottom: 0; }
-
-    .drink-side {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(9px, 0.8vw, 11px);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 3px;
-    }
-
-    .drink-name {
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: clamp(15px, 1.6vw, 24px);
-      color: var(--text);
-      margin-bottom: 5px;
-      line-height: 1.1;
-    }
-
-    .drink-desc {
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      font-size: clamp(11px, 1.05vw, 14px);
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .drink-rule {
-      border: none;
-      border-top: 1px solid var(--rule);
-      margin: clamp(14px, 2vh, 24px) 0;
-    }
-
-    /* ══════════════════════════
-       QR — bottom of left col
-    ══════════════════════════ */
-    .qr-section {
-      display: flex;
-      align-items: center;
-      gap: clamp(14px, 2vw, 28px);
-      padding-top: clamp(16px, 2.2vh, 28px);
-      border-top: 1px solid var(--rule);
-    }
-
-    .qr-frame {
-      background: #fff;
-      padding: clamp(7px, 0.8vw, 12px);
-      border-radius: 3px;
-      box-shadow: 0 0 24px rgba(201,168,76,0.1);
-      width: clamp(80px, 9vw, 130px);
-      height: clamp(80px, 9vw, 130px);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .qr-frame img {
-      width: 100%; height: 100%;
-      object-fit: contain; display: block;
-    }
-
-    .qr-text { flex: 1; }
-
-    .qr-label {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 400;
-      font-size: clamp(10px, 1vw, 14px);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-
-    .qr-note {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: clamp(12px, 1.2vw, 16px);
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    /* ══════════════════════════
-       RECORD
+       RECORD (left pane)
     ══════════════════════════ */
     .record-kicker {
       font-family: 'Oswald', sans-serif;
@@ -229,6 +114,8 @@
       padding-bottom: clamp(12px, 1.6vh, 18px);
       border-bottom: 1px solid var(--rule);
       margin-bottom: clamp(10px, 1.4vh, 16px);
+      max-width: 480px;
+      width: 100%;
     }
 
     .record-meta {
@@ -248,13 +135,105 @@
       line-height: 1.75;
       color: var(--muted);
       margin-bottom: clamp(10px, 1.4vh, 18px);
+      max-width: 440px;
     }
 
     .record-body:last-child { margin-bottom: 0; }
+    .record-body strong { color: var(--text); font-weight: 500; }
 
-    .record-body strong {
+    /* ══════════════════════════
+       COCKTAILS (right pane)
+    ══════════════════════════ */
+    .drinks-kicker {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 0.85vw, 12px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: clamp(14px, 2vh, 24px);
+    }
+
+    .drink { margin-bottom: clamp(14px, 2vh, 26px); max-width: 400px; }
+    .drink:last-child { margin-bottom: 0; }
+
+    .drink-side {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 0.8vw, 11px);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .drink-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(15px, 1.6vw, 24px);
       color: var(--text);
-      font-weight: 500;
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+
+    .drink-desc {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: clamp(11px, 1.05vw, 14px);
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .drink-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      width: 100%;
+      max-width: 400px;
+      margin: clamp(14px, 2vh, 24px) auto;
+    }
+
+    /* ══════════════════════════
+       QR FOOTER
+    ══════════════════════════ */
+    .footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(8px, 1vh, 14px);
+      padding: clamp(14px, 2vh, 26px) 60px;
+      border-top: 1px solid var(--rule);
+      background: linear-gradient(0deg, #111008 0%, var(--bg) 100%);
+    }
+
+    .qr-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      font-size: clamp(10px, 1vw, 14px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .qr-frame {
+      background: #fff;
+      padding: clamp(8px, 0.9vw, 13px);
+      border-radius: 3px;
+      box-shadow: 0 0 28px rgba(201,168,76,0.12);
+      width: clamp(90px, 10vw, 150px);
+      height: clamp(90px, 10vw, 150px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .qr-note {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(12px, 1.2vw, 17px);
+      color: var(--muted);
     }
   </style>
 </head>
@@ -271,61 +250,17 @@
   <!-- BODY -->
   <div class="body">
 
-    <!-- LEFT: Drinks + QR -->
+    <!-- LEFT: Record -->
     <div class="col col-left">
-
-      <div class="drinks-section">
-        <div class="drinks-kicker">Tonight's Cocktails</div>
-
-        <div class="drink">
-          <div class="drink-side">Side A</div>
-          <div class="drink-name">McNicks Spritz</div>
-          <div class="drink-desc">
-            Named for Stevie Nicks, who famously admitted she'd drink both
-            tequila <em>and</em> wine. This cocktail refuses to choose &mdash;
-            a citrusy tequila-and-white-wine spritz that combines the best of both worlds.
-          </div>
-        </div>
-
-        <hr class="drink-rule">
-
-        <div class="drink">
-          <div class="drink-side">Side B</div>
-          <div class="drink-name">Black Velvet</div>
-          <div class="drink-desc">
-            Inspired by Stevie's iconic West Village look &mdash; layered fabrics,
-            fringe, and crushed velvet. Two ingredients, two very different worlds:
-            Guinness meets dry sparkling wine. Dark, elegant, and unexpectedly bubbly.
-          </div>
-        </div>
-      </div>
-
-      <!-- QR at bottom -->
-      <div class="qr-section">
-        <div class="qr-frame">
-          <img src="qr-code.png" alt="Scan to join trivia">
-        </div>
-        <div class="qr-text">
-          <div class="qr-label">Scan to Join Trivia</div>
-          <div class="qr-note">Trivia starts after the first record ends.</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT: Record -->
-    <div class="col col-right">
       <div class="record-kicker">Tonight's Record</div>
       <div class="record-title">Fleetwood Mac &mdash; Rumours (1977)</div>
       <div class="record-meta">Pop Rock &nbsp;·&nbsp; Warner Bros. &nbsp;·&nbsp; Producers: Ken Caillat, Richard Dashut &amp; Fleetwood Mac</div>
-
       <div class="record-body">
         Recorded while the band was falling apart in real time &mdash; two couples
         breaking up simultaneously, everyone furious at everyone else. The result was
         <strong>11 tracks of pop perfection.</strong> Over 40 million copies sold.
         <strong>Chaos is productive.</strong>
       </div>
-
       <div class="record-body">
         Their eleventh studio album proved to be the band's enduring masterpiece &mdash;
         it snagged a Grammy and became the fastest-selling LP of all time. Produced
@@ -334,7 +269,44 @@
       </div>
     </div>
 
+    <!-- RIGHT: Cocktails -->
+    <div class="col">
+      <div class="drinks-kicker">Tonight's Cocktails</div>
+
+      <div class="drink">
+        <div class="drink-side">Side A</div>
+        <div class="drink-name">McNicks Spritz</div>
+        <div class="drink-desc">
+          Named for Stevie Nicks, who famously admitted she'd drink both
+          tequila <em>and</em> wine. A citrusy tequila-and-white-wine spritz
+          that combines the best of both worlds.
+        </div>
+      </div>
+
+      <hr class="drink-rule">
+
+      <div class="drink">
+        <div class="drink-side">Side B</div>
+        <div class="drink-name">Black Velvet</div>
+        <div class="drink-desc">
+          Inspired by Stevie's iconic West Village look &mdash; layered fabrics,
+          fringe, and crushed velvet. Two ingredients, two very different worlds:
+          Guinness meets dry sparkling wine. Dark, elegant, and unexpectedly bubbly.
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <!-- FOOTER: QR -->
+  <footer class="footer">
+    <div class="qr-label">Scan to Join Trivia</div>
+    <div class="qr-frame">
+      <img src="qr-code.png" alt="Scan to join trivia">
+    </div>
+    <div class="qr-note">Trivia starts after the first record ends.</div>
+  </footer>
+
 </div>
 </body>
 </html>
