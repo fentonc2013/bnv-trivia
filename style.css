@@ -72,6 +72,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
+  width: 100%;
 }
 
 .app-logo {
@@ -526,13 +527,12 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .admin-content {
-  flex: 1;
   padding: 16px;
   max-width: 560px;
-  margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
 }
