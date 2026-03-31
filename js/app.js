@@ -46,7 +46,7 @@ function toast(msg, type = 'info') {
 
 function render() {
   document.getElementById('root').innerHTML = buildView();
-  if (S.view === 'question') window.scrollTo(0, 0);
+  if (S.view === 'question') requestAnimationFrame(() => window.scrollTo(0, 0));
 }
 
 function roundQuestions(round) {
@@ -129,32 +129,29 @@ async function submitAnswer() {
 // --- Timer ---
 function startTimer() {
   clearTimer();
-  const bar     = () => document.querySelector('.timer-bar');
-  const num     = () => document.querySelector('.timer-number');
+  const bar     = () => document.querySelector('.timer-bar-fill');
+  const num     = () => document.querySelector('.timer-pill');
   const totalMs = QUESTION_TIME_SECONDS * 1000;
   const endTime = S.game?.questionEndTime || (Date.now() + totalMs);
-  const circumference = 188.4; // 2π × 30
 
   function tick() {
     const remaining = Math.max(0, endTime - Date.now());
     const secs = Math.ceil(remaining / 1000);
     const pct  = remaining / totalMs;
-    const offset = circumference * (1 - pct);
 
     const barEl = bar();
     const numEl = num();
     if (barEl) {
-      barEl.style.strokeDashoffset = offset;
+      barEl.style.width = (pct * 100) + '%';
       barEl.classList.toggle('urgent', secs <= 10);
     }
     if (numEl) {
-      numEl.textContent = secs;
+      numEl.textContent = secs + 's';
       numEl.classList.toggle('urgent', secs <= 10);
     }
 
     if (remaining <= 0) {
       clearTimer();
-      // Lock input if still on question view
       const inp = document.getElementById('answer-input');
       const btn = document.getElementById('submit-btn');
       if (inp) inp.disabled = true;
@@ -362,22 +359,27 @@ function buildQuestion() {
   const rqs      = roundQuestions(S.game.round);
   const qNum     = S.game.questionIndex + 1;
   const total    = rqs.length;
-  const circ     = 188.4;
   const endTime  = S.game.questionEndTime || (Date.now() + QUESTION_TIME_SECONDS * 1000);
   const remaining = Math.max(0, endTime - Date.now());
   const initSecs = Math.ceil(remaining / 1000);
-  const initOffset = circ * (1 - remaining / (QUESTION_TIME_SECONDS * 1000));
+  const initPct  = (remaining / (QUESTION_TIME_SECONDS * 1000) * 100).toFixed(1);
 
   return `
-    <div class="screen" style="justify-content:flex-start;padding-top:24px">
+    <div class="screen" style="justify-content:flex-start;padding-top:16px">
       <div style="width:100%;max-width:480px">
+
         <div class="question-meta">
           <span class="question-round-label">Round ${S.game.round}</span>
-          <span class="question-number">Question ${qNum} of ${total}</span>
+          <span class="question-number">Q ${qNum} / ${total}</span>
           <span class="points-badge points-${q.points}">${q.points} pt${q.points !== 1 ? 's' : ''}</span>
+          <span class="timer-pill${initSecs <= 10 ? ' urgent' : ''}">${initSecs}s</span>
         </div>
 
-        <div class="card gold-border mb-16">
+        <div class="timer-bar-wrap">
+          <div class="timer-bar-fill${initSecs <= 10 ? ' urgent' : ''}" style="width:${initPct}%"></div>
+        </div>
+
+        <div class="card gold-border mb-16" style="margin-top:12px">
           <p class="question-text">${esc(q.question)}</p>
           <textarea class="form-input answer-input" id="answer-input"
             placeholder="Type your answer here…" rows="3"
@@ -389,17 +391,6 @@ function buildQuestion() {
         </button>
         <p class="text-center text-sm text-muted mt-8">You can't change your answer after submitting.</p>
 
-        <div class="timer-wrap" style="margin-top:20px;margin-bottom:0">
-          <div class="timer-circle">
-            <svg class="timer-svg" viewBox="0 0 72 72">
-              <circle class="timer-track" cx="36" cy="36" r="30"/>
-              <circle class="timer-bar" cx="36" cy="36" r="30"
-                style="stroke-dashoffset:${initOffset}"
-                id="timer-bar-el"/>
-            </svg>
-            <div class="timer-number${initSecs <= 10 ? ' urgent' : ''}" id="timer-num-el">${initSecs}</div>
-          </div>
-        </div>
       </div>
     </div>`;
 }
