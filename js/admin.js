@@ -385,7 +385,8 @@ function buildGameTab() {
         <button class="btn btn-outline" onclick="closeQuestion()">⏹ Close Question Early</button>` : ''}
 
       ${state === 'question_closed' ? `
-        <p class="text-muted text-sm mb-8"><strong>${answerCount}</strong> answer${answerCount!==1?'s':''} in — mark below, then apply.</p>` : ''}
+        <p class="text-muted text-sm mb-8"><strong>${answerCount}</strong> answer${answerCount!==1?'s':''} received.</p>
+        ${answerCount === 0 ? `<button class="btn btn-gold" onclick="nextQuestion()">→ Skip to Next Question</button>` : '<p class="text-muted text-sm">Mark answers below, then apply.</p>'}` : ''}
 
       ${state === 'question_results' ? `
         <p class="text-muted text-sm text-center mb-8">Showing results to players… auto-advances in ~10s.</p>
@@ -406,7 +407,7 @@ function buildGameTab() {
       </div>
     </div>
 
-    ${['question_closed','scoring'].includes(state) && q ? `
+    ${['question_active','question_closed','scoring'].includes(state) && q ? `
       <div style="margin-bottom:16px">
         <div class="correct-answer-ref" style="margin-bottom:12px">
           <strong>Ref:</strong> ${esc(q.answer)}
