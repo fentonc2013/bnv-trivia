@@ -4,7 +4,7 @@
 
 const A = {
   view:      'password',  // password | main
-  tab:       'control',   // control | scoring | leaderboard
+  tab:       'game',      // game | leaderboard
   game:      null,
   players:   {},
   answers:   {},          // { 'r1_q0': { playerId: answerText, ... } }
@@ -13,6 +13,7 @@ const A = {
 };
 
 let db, gameRef, playersRef, answersRef;
+let autoAdvanceTimer = null;
 
 // --- Helpers ---
 function esc(s) {
@@ -201,11 +202,12 @@ async function applyScores() {
   A.scoringApplied = true;
   toast('Scores applied! Showing results to players…', 'success');
   await gameRef.update({ state: 'question_results' });
-  setTimeout(() => nextQuestion(), 10000);
+  autoAdvanceTimer = setTimeout(() => nextQuestion(), 10000);
 }
 
 async function nextQuestion() {
   if (!A.game) return;
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
   const rqs    = roundQuestions(A.game.round);
   const nextIdx = A.game.questionIndex + 1;
 
@@ -299,10 +301,6 @@ function buildMain() {
   const g     = A.game;
   const state = g?.state || 'lobby';
   const round = g?.round || 1;
-  const qIdx  = g?.questionIndex ?? 0;
-  const rqs   = roundQuestions(round);
-  const q     = currentQuestion();
-  const key   = currentKey();
 
   return `
     <div class="admin-layout">
@@ -320,13 +318,11 @@ function buildMain() {
       <div class="admin-content">
 
         <div class="admin-tabs">
-          <button class="admin-tab${A.tab==='control'?' active':''}"    onclick="setTab('control')">🎮 Control</button>
-          <button class="admin-tab${A.tab==='scoring'?' active':''}"    onclick="setTab('scoring')">✏️ Scoring</button>
-          <button class="admin-tab${A.tab==='leaderboard'?' active':''}" onclick="setTab('leaderboard')">🏆 Scores</button>
+          <button class="admin-tab${A.tab==='game'?' active':''}"         onclick="setTab('game')">🎮 Game</button>
+          <button class="admin-tab${A.tab==='leaderboard'?' active':''}"  onclick="setTab('leaderboard')">🏆 Scores</button>
         </div>
 
-        ${A.tab === 'control'    ? buildControlTab(g, state, round, qIdx, rqs, q) : ''}
-        ${A.tab === 'scoring'    ? buildScoringTab(q, key, state) : ''}
+        ${A.tab === 'game'        ? buildGameTab() : ''}
         ${A.tab === 'leaderboard' ? buildLeaderboardTab() : ''}
 
       </div>
@@ -344,35 +340,35 @@ function stateLabel(state) {
   }[state] || state;
 }
 
-function buildControlTab(g, state, round, qIdx, rqs, q) {
+function buildGameTab() {
+  const g     = A.game;
+  const state = g?.state || 'lobby';
+  const round = g?.round || 1;
+  const qIdx  = g?.questionIndex ?? 0;
+  const rqs   = roundQuestions(round);
+  const q     = currentQuestion();
+  const key   = currentKey();
   const playerCount = Object.keys(A.players).length;
-  const answerCount = g ? Object.keys((A.answers[currentKey()] || {})).length : 0;
+  const answers = key ? (A.answers[key] || {}) : {};
+  const answerCount = Object.keys(answers).length;
+  const playerIds = Object.keys(answers);
 
   return `
     <div class="stats-row">
-      <div class="stat-box">
-        <div class="stat-value">${playerCount}</div>
-        <div class="stat-label">Players</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-value">R${round} Q${qIdx+1}/${rqs.length}</div>
-        <div class="stat-label">Progress</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-value">${answerCount}</div>
-        <div class="stat-label">Answers In</div>
-      </div>
+      <div class="stat-box"><div class="stat-value">${playerCount}</div><div class="stat-label">Players</div></div>
+      <div class="stat-box"><div class="stat-value">R${round} Q${qIdx+1}/${rqs.length}</div><div class="stat-label">Progress</div></div>
+      <div class="stat-box"><div class="stat-value">${answerCount}</div><div class="stat-label">Answers In</div></div>
     </div>
 
     ${q ? `
       <div class="card" style="margin-bottom:16px">
-        <div class="card-title">Current Question</div>
-        <p style="font-size:16px;line-height:1.5;margin-bottom:8px">${esc(q.question)}</p>
-        <p class="text-sm" style="color:var(--gold)">✓ Answer: ${esc(q.answer)}</p>
+        <div class="card-title">Current Question · ${q.points} pt${q.points!==1?'s':''}</div>
+        <p style="font-size:15px;line-height:1.5;margin-bottom:8px">${esc(q.question)}</p>
+        <p class="text-sm" style="color:var(--gold)">✓ ${esc(q.answer)}</p>
       </div>` : ''}
 
-    <div class="card">
-      <div class="card-title">Game Controls</div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Controls</div>
 
       ${state === 'lobby' && round === 1 ? `
         <button class="btn btn-gold" onclick="startRound(1)">▶ Start Round 1</button>` : ''}
@@ -381,37 +377,71 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
         <button class="btn btn-gold" onclick="startRound(2)">▶ Start Round 2</button>` : ''}
 
       ${state === 'lobby' && g ? `
-        <p class="text-muted text-sm mt-16 text-center">Waiting for players to join…</p>
-        ${playerCount > 0 ? `<button class="btn btn-gold mt-16" onclick="openQuestion()">▶ Open Question ${qIdx+1}</button>` : ''}` : ''}
+        <p class="text-muted text-sm mt-8 text-center">Waiting for players…</p>
+        ${playerCount > 0 ? `<button class="btn btn-gold mt-8" onclick="openQuestion()">▶ Open Question ${qIdx+1}</button>` : ''}` : ''}
 
       ${state === 'question_active' ? `
-        <p class="text-muted text-sm mb-16">Question is live — <strong>${answerCount}</strong> of <strong>${playerCount}</strong> players have answered.</p>
+        <p class="text-muted text-sm mb-16">Live — <strong>${answerCount}</strong> / <strong>${playerCount}</strong> answered.</p>
         <button class="btn btn-outline" onclick="closeQuestion()">⏹ Close Question Early</button>` : ''}
 
       ${state === 'question_closed' ? `
-        <p class="text-muted text-sm mb-16"><strong>${answerCount}</strong> answers received.</p>
-        <button class="btn btn-gold" onclick="setTab('scoring')">✏️ ${answerCount > 0 ? 'Score Answers →' : 'Go to Scoring Tab →'}</button>` : ''}
-
-      ${state === 'scoring' ? `
-        <button class="btn btn-gold" onclick="setTab('scoring')">✏️ Go to Scoring Tab</button>` : ''}
+        <p class="text-muted text-sm mb-8"><strong>${answerCount}</strong> answer${answerCount!==1?'s':''} in — mark below, then apply.</p>` : ''}
 
       ${state === 'question_results' ? `
-        <p class="text-muted text-sm text-center">Showing results to players… next question opens automatically.</p>` : ''}
+        <p class="text-muted text-sm text-center mb-8">Showing results to players… auto-advances in ~10s.</p>
+        <button class="btn btn-gold" onclick="nextQuestion()">→ Skip to Next Now</button>` : ''}
 
       ${state === 'round_end' ? `
         ${round < 2
           ? `<button class="btn btn-gold" onclick="startRound(2)">▶ Start Round 2</button>`
-          : `<button class="btn btn-gold" onclick="endGame()">🏁 End Game & Show Final Scores</button>`}` : ''}
+          : `<button class="btn btn-gold" onclick="endGame()">🏁 End Game &amp; Show Final Scores</button>`}` : ''}
 
       ${state === 'game_end' ? `
         <p class="text-center text-gold" style="font-size:18px;font-weight:700">🎉 Game Over!</p>` : ''}
 
       <hr style="border-color:var(--border);margin:16px 0">
-      <button class="btn btn-outline" onclick="resetGame()">🔄 Reset / New Game</button>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-outline" onclick="endRound()">⏹ End Round</button>
+        <button class="btn btn-outline" onclick="resetGame()">🔄 Hard Reset</button>
+      </div>
     </div>
 
-    <div class="card mt-16">
-      <div class="card-title">Player List</div>
+    ${['question_closed','scoring'].includes(state) && q ? `
+      <div style="margin-bottom:16px">
+        <div class="correct-answer-ref" style="margin-bottom:12px">
+          <strong>Ref:</strong> ${esc(q.answer)}
+          <span style="color:var(--text-muted);font-size:12px"> · Accept reasonable variations</span>
+        </div>
+        ${playerIds.length === 0
+          ? `<p class="text-muted text-center" style="padding:16px 0">No answers submitted.</p>`
+          : playerIds.map(pid => {
+              const p    = A.players[pid];
+              const name = p ? p.name : pid;
+              const ans  = answers[pid];
+              const mark = A.markings[pid];
+              const rowClass = mark === true ? 'marked-correct' : mark === false ? 'marked-incorrect' : '';
+              return `
+                <div class="answer-row ${rowClass}" id="answer-row-${pid}">
+                  <div class="answer-info">
+                    <div class="answer-player">${esc(name)}</div>
+                    <div class="answer-text">${esc(ans)}</div>
+                  </div>
+                  <div class="answer-actions">
+                    <button class="mark-btn ${mark===true?'correct':''}" onclick="markAnswer('${pid}', true)"  title="Correct">✓</button>
+                    <button class="mark-btn ${mark===false?'incorrect':''}" onclick="markAnswer('${pid}', false)" title="Wrong">✗</button>
+                  </div>
+                </div>`;
+            }).join('')}
+        <button class="btn btn-gold mt-8" id="apply-scores-btn"
+          onclick="applyScores()"
+          ${A.scoringApplied || Object.keys(A.markings).length === 0 ? 'disabled' : ''}>
+          Apply Scores (${Object.keys(A.markings).length}/${playerIds.length} marked)
+        </button>
+        <p class="text-muted text-sm text-center mt-8">Players not marked get 0. Scores applied, then results shown automatically.</p>
+      </div>` : ''}
+
+    <div class="card">
+      <div class="card-title">Players</div>
       <div class="player-list">
         ${Object.values(A.players).sort((a,b)=>a.joinedAt-b.joinedAt).map(p => `
           <div class="player-item">
@@ -422,60 +452,6 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
         ${playerCount === 0 ? '<p class="text-muted text-sm text-center">No players yet</p>' : ''}
       </div>
     </div>`;
-}
-
-function buildScoringTab(q, key, state) {
-  if (!q) return '<div class="card"><p class="text-muted text-center">No active question.</p></div>';
-
-  const answers = key ? (A.answers[key] || {}) : {};
-  const playerIds = Object.keys(answers);
-
-  return `
-    <div class="card mb-16">
-      <div class="card-title">Question</div>
-      <p style="font-size:15px;line-height:1.5;margin-bottom:12px">${esc(q.question)}</p>
-      <div class="correct-answer-ref">
-        <strong>Reference Answer:</strong> ${esc(q.answer)}
-        <span style="color:var(--text-muted);font-size:12px"> · Accept reasonable variations</span>
-      </div>
-    </div>
-
-    ${playerIds.length === 0
-      ? `<div class="card"><p style="text-align:center;color:var(--text-muted);padding:16px 0">No answers submitted for this question.</p></div>`
-      : `<div style="margin-bottom:16px">
-          ${playerIds.map(pid => {
-            const p = A.players[pid];
-            const name = p ? p.name : pid;
-            const ans  = answers[pid];
-            const mark = A.markings[pid];
-            const rowClass = mark === true ? 'marked-correct' : mark === false ? 'marked-incorrect' : '';
-            return `
-              <div class="answer-row ${rowClass}" id="answer-row-${pid}">
-                <div class="answer-info">
-                  <div class="answer-player">${esc(name)}</div>
-                  <div class="answer-text">${esc(ans)}</div>
-                </div>
-                <div class="answer-actions">
-                  <button class="mark-btn ${mark===true?'correct':''}" onclick="markAnswer('${pid}', true)"  title="Correct">✓</button>
-                  <button class="mark-btn ${mark===false?'incorrect':''}" onclick="markAnswer('${pid}', false)" title="Wrong">✗</button>
-                </div>
-              </div>`;
-          }).join('')}
-        </div>
-        <button class="btn btn-gold" id="apply-scores-btn"
-          onclick="applyScores()"
-          ${A.scoringApplied || Object.keys(A.markings).length === 0 ? 'disabled' : ''}>
-          Apply Scores (${Object.keys(A.markings).length}/${playerIds.length} marked)
-        </button>
-        <p class="text-muted text-sm text-center mt-8">Players not marked get 0. Scores apply and game advances automatically.</p>`}
-
-    <hr style="border-color:var(--border);margin:20px 0">
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="btn btn-gold"    onclick="nextQuestion()">→ Skip &amp; Next Question</button>
-      <button class="btn btn-outline" onclick="endRound()">⏹ End Round</button>
-      <button class="btn btn-outline" onclick="resetGame()">🔄 Hard Reset</button>
-    </div>
-  `;
 }
 
 function buildLeaderboardTab() {
