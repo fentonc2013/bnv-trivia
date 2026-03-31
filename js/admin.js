@@ -232,6 +232,12 @@ async function nextQuestion() {
   }
 }
 
+async function endRound() {
+  if (!confirm(`End Round ${A.game?.round} now and show leaderboard?`)) return;
+  await gameRef.update({ state: 'round_end' });
+  toast(`Round ${A.game?.round} ended.`, 'success');
+}
+
 async function endGame() {
   if (!confirm('End the game and show final scores to all players?')) return;
   await gameRef.update({ state: 'game_end' });
@@ -384,9 +390,7 @@ function buildControlTab(g, state, round, qIdx, rqs, q) {
 
       ${state === 'question_closed' ? `
         <p class="text-muted text-sm mb-16"><strong>${answerCount}</strong> answers received.</p>
-        ${answerCount > 0
-          ? `<button class="btn btn-gold" onclick="setTab('scoring')">✏️ Score Answers →</button>`
-          : `<button class="btn btn-gold" onclick="nextQuestion()">→ Skip &amp; Next Question / End Round</button>`}` : ''}
+        <button class="btn btn-gold" onclick="setTab('scoring')">✏️ ${answerCount > 0 ? 'Score Answers →' : 'Go to Scoring Tab →'}</button>` : ''}
 
       ${state === 'scoring' ? `
         <button class="btn btn-gold" onclick="setTab('scoring')">✏️ Go to Scoring Tab</button>` : ''}
@@ -437,10 +441,7 @@ function buildScoringTab(q, key, state) {
     </div>
 
     ${playerIds.length === 0
-      ? `<div class="card">
-           <p style="text-align:center;color:var(--text-muted);padding:16px 0">No answers submitted for this question.</p>
-           <button class="btn btn-gold" onclick="nextQuestion()">→ Skip &amp; Next Question / End Round</button>
-         </div>`
+      ? `<div class="card"><p style="text-align:center;color:var(--text-muted);padding:16px 0">No answers submitted for this question.</p></div>`
       : `<div style="margin-bottom:16px">
           ${playerIds.map(pid => {
             const p = A.players[pid];
@@ -467,6 +468,13 @@ function buildScoringTab(q, key, state) {
           Apply Scores (${Object.keys(A.markings).length}/${playerIds.length} marked)
         </button>
         <p class="text-muted text-sm text-center mt-8">Players not marked get 0. Scores apply and game advances automatically.</p>`}
+
+    <hr style="border-color:var(--border);margin:20px 0">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn btn-gold"    onclick="nextQuestion()">→ Skip &amp; Next Question</button>
+      <button class="btn btn-outline" onclick="endRound()">⏹ End Round</button>
+      <button class="btn btn-outline" onclick="resetGame()">🔄 Hard Reset</button>
+    </div>
   `;
 }
 

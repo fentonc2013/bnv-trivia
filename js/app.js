@@ -46,6 +46,7 @@ function toast(msg, type = 'info') {
 
 function render() {
   document.getElementById('root').innerHTML = buildView();
+  if (S.view === 'question') window.scrollTo(0, 0);
 }
 
 function roundQuestions(round) {
