@@ -106,6 +106,13 @@ const QUESTIONS = [
     answer: "Biggie Smalls (The Notorious B.I.G.) and Tupac Shakur (2Pac)",
     points: 1
   },
+  {
+    id: 'q31',
+    round: 1,
+    question: "Which of the following was NOT an official nickname for one of the Spice Girls — Sporty Spice, Ginger Spice, Posh Spice, or Sugar Spice?",
+    answer: "Sugar Spice",
+    points: 1
+  },
 
   // -------------------------
   // 2 POINT QUESTIONS
