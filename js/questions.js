@@ -16,21 +16,21 @@ const QUESTIONS = [
   {
     id: 'q1',
     round: 1,
-    question: "This movie soundtrack, anchored by Canadian pop singer Celine Dion, spent 16 weeks at #1 on the Billboard Charts.",
+    question: "This movie soundtrack, anchored by a hit song by Canadian pop singer Celine Dion, spent 16 weeks at #1 on the Billboard Charts.",
     answer: "Titanic",
     points: 1
   },
   {
     id: 'q2',
     round: 1,
-    question: "This female pop star, whose catalog includes Fantasy, Honey, and Always Be My Baby, was infamously caught lip syncing during a New Year's Eve telecast in 2016.",
+    question: "This female pop star, whose catalog includes the songs \"Fantasy\" and \"Always Be My Baby\", was infamously caught lip syncing during a New Year's Eve telecast in 2016.",
     answer: "Mariah Carey",
     points: 1
   },
   {
     id: 'q3',
     round: 1,
-    question: "Billy Joel, Alicia Keys, and Nas have all released a song with the same \"State of Mind\" about this major US city.",
+    question: "Billy Joel, Alicia Keys, and Nas have all released a song with the same \"State of Mind\" about this large US city.",
     answer: "New York",
     points: 1,
     flag: 'must'
@@ -46,7 +46,7 @@ const QUESTIONS = [
   {
     id: 'q5',
     round: 1,
-    question: "In one of her biggest hits from her album Jagged Little Pill, Alanis Morissette starts off by singing \"An old man turned ninety-eight, he won the lottery and died the next day.\" What is the name of that song?",
+    question: "In one of her biggest hits from her album Jagged Little Pill, Alanis Morissette starts off by singing \"An old man turned ninety-eight, he won the lottery and died the next day.\" What is the name of the song?",
     answer: "Ironic",
     points: 1
   },
@@ -60,7 +60,7 @@ const QUESTIONS = [
   {
     id: 'q7',
     round: 1,
-    question: "This Canadian artist released \"Complicated\" as her debut single in 2002, launching one of the biggest careers in pop punk.",
+    question: "This Canadian pop punk artist released \"Complicated\" as her debut single in 2002.",
     answer: "Avril Lavigne",
     points: 1
   },
@@ -74,21 +74,21 @@ const QUESTIONS = [
   {
     id: 'q9',
     round: 2,
-    question: "This Atlanta trio was the best selling American girl group of the 90s — despite filing for bankruptcy in 1995 at the height of their fame.",
+    question: "This Atlanta trio was the best selling American female group of the 90s — despite filing for bankruptcy in 1995 at the height of their fame.",
     answer: "TLC",
     points: 1
   },
   {
     id: 'q10',
     round: 2,
-    question: "This 2003 track by The White Stripes features an iconic seven-note riff that has since become a standard chant at sports stadiums worldwide.",
+    question: "This 2003 track by The White Stripes features an iconic seven-note riff that has since become a standard chant in sports stadiums worldwide.",
     answer: "Seven Nation Army",
     points: 1
   },
   {
     id: 'q11',
     round: 2,
-    question: "This Las Vegas band, whose debut major label release Hot Fuss furnished three #1 singles (including \"Mr. Brightside\"), is fronted by Brandon Flowers.",
+    question: "This Las Vegas band, whose debut major label release Hot Fuss furnished three #1 singles, is fronted by singer Brandon Flowers.",
     answer: "The Killers",
     points: 1
   },
@@ -104,13 +104,6 @@ const QUESTIONS = [
     round: 2,
     question: "In a span of just six months between late 1996 and early 1997, the music world lost both of these legendary rap artists due to gun violence. Name them.",
     answer: "Biggie Smalls (The Notorious B.I.G.) and Tupac Shakur (2Pac)",
-    points: 1
-  },
-  {
-    id: 'q31',
-    round: 1,
-    question: "Which of the following was NOT an official nickname for one of the Spice Girls — Sporty Spice, Ginger Spice, Posh Spice, or Sugar Spice?",
-    answer: "Sugar Spice",
     points: 1
   },
 
@@ -136,7 +129,7 @@ const QUESTIONS = [
   {
     id: 'q16',
     round: 1,
-    question: "This singer/emcee and her future ex-boyfriend were both members of the critically acclaimed rap group the Fugees — after their split, her debut solo album earned her 6 Grammys in a single night in 2000, a record at the time.",
+    question: "This singer/rapper and her future ex-boyfriend were both members of the critically acclaimed rap group the Fugees — after their split, her debut (and only) solo album earned her 6 Grammys in a single night in 2000.",
     answer: "Lauryn Hill",
     points: 2
   },
@@ -178,14 +171,14 @@ const QUESTIONS = [
   {
     id: 'q22',
     round: 2,
-    question: "This New York City band's 2001 debut Is This It is widely credited with sparking the indie rock revival of the early 2000s.",
+    question: "This New York City band's 2001 debut \"Is This It is widely\" credited with sparking the indie rock revival of the early 2000s.",
     answer: "The Strokes",
     points: 2
   },
   {
     id: 'q23',
     round: 2,
-    question: "This alternative metal band, whose four members are all of Armenian descent, released the 2002 platinum-certified record Steal This Album! — featuring a cover designed to look like a hand-written, burned CD.",
+    question: "This alternative metal band, whose four members are all of Armenian descent, released the 2002 platinum-certified record \"Steal This Album!\" — featuring a cover designed to look like a hand-written, burned CD.",
     answer: "System of a Down",
     points: 2,
     flag: 'must'
@@ -193,7 +186,7 @@ const QUESTIONS = [
   {
     id: 'q24',
     round: 2,
-    question: "This \"virtual band\" was created by Damon Albarn, frontman of Blur, and featured animated characters in all their music videos — including the one for their breakout hit \"Clint Eastwood.\"",
+    question: "This \"virtual band\" was created by Damon Albarn, frontman of Blur, and featured animated characters in all their music videos",
     answer: "Gorillaz",
     points: 2
   },
@@ -207,7 +200,7 @@ const QUESTIONS = [
   {
     id: 'q26',
     round: 2,
-    question: "Finish this Sublime lyric from \"What I Got\": \"Early in the morning, rising to the street, light me up that cigarette and I _____\"",
+    question: "Finish this Sublime lyric from \"What I Got\": \"Early in the morning, rising to the street, light me up that cigarette and I _____ _____ __ __ ___\"",
     answer: "strap shoes on my feet",
     points: 2,
     flag: 'must'
@@ -215,14 +208,14 @@ const QUESTIONS = [
   {
     id: 'q27',
     round: 2,
-    question: "This female artist, from a famous musical family, has a catalog of hit songs across multiple decades including \"What Have You Done For Me Lately\" (1986), \"That's the Way Love Goes\" (1993), and \"All for You\" (2001). Who is she?",
+    question: "This female artist from a famous musical family, has a catalog of hit songs across multiple decades including \"What Have You Done For Me Lately\" (1986), \"That's the Way Love Goes\" (1993), and \"All for You\" (2001). Who is she?",
     answer: "Janet Jackson",
     points: 2
   },
   {
     id: 'q28',
     round: 2,
-    question: "Three of these four bands performed at Woodstock 99 — Korn, Limp Bizkit, Linkin Park, Rage Against the Machine. Which one wasn't there?",
+    question: "Three of these four rock/metal bands performed at Woodstock 99 — Korn, Limp Bizkit, Linkin Park, Rage Against the Machine. Which one wasn't there?",
     answer: "Linkin Park",
     points: 2,
     flag: 'must'
@@ -242,6 +235,13 @@ const QUESTIONS = [
     answer: "Taylor Swift",
     points: 2,
     flag: 'must'
+  },
+  {
+    id: 'q31',
+    round: 1,
+    question: "Which of the following was NOT an official nickname for one of the Spice Girls — Sporty Spice, Ginger Spice, Posh Spice, or Sugar Spice?",
+    answer: "Sugar Spice",
+    points: 1
   }
 
 ];
