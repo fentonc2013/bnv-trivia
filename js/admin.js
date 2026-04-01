@@ -47,14 +47,20 @@ function roundQuestions(round) {
   return QUESTIONS.filter(q => q.round === round); // fallback for legacy game state
 }
 
+const TIEBREAKER_STATES = ['tiebreaker_active','tiebreaker_closed','tiebreaker_results'];
+
 function currentQuestion() {
   if (!A.game) return null;
+  if (TIEBREAKER_STATES.includes(A.game.state))
+    return QUESTIONS.find(q => q.id === A.game.tiebreakerQuestionId) || null;
   const rqs = roundQuestions(A.game.round);
   return rqs[A.game.questionIndex] || null;
 }
 
 function currentKey() {
   if (!A.game) return null;
+  if (TIEBREAKER_STATES.includes(A.game.state))
+    return `tb_${A.game.tiebreakerQuestionId}`;
   return `r${A.game.round}_q${A.game.questionIndex}`;
 }
 
@@ -200,9 +206,22 @@ async function applyScores() {
   await db.ref(`trivia/scoring/${key}`).set(A.markings);
 
   A.scoringApplied = true;
-  toast('Scores applied! Showing results to players…', 'success');
-  await gameRef.update({ state: 'question_results' });
-  autoAdvanceTimer = setTimeout(() => nextQuestion(), 10000);
+  const isTiebreaker = TIEBREAKER_STATES.includes(A.game?.state);
+  if (isTiebreaker) {
+    const returnState = A.game.tiebreakerReturnState;
+    toast('Tiebreaker scored! Showing results…', 'success');
+    await gameRef.update({ state: 'tiebreaker_results' });
+    autoAdvanceTimer = setTimeout(async () => {
+      autoAdvanceTimer = null;
+      A.markings = {};
+      A.scoringApplied = false;
+      await gameRef.update({ state: returnState });
+    }, 10000);
+  } else {
+    toast('Scores applied! Showing results to players…', 'success');
+    await gameRef.update({ state: 'question_results' });
+    autoAdvanceTimer = setTimeout(() => nextQuestion(), 10000);
+  }
 }
 
 async function nextQuestion() {
@@ -238,6 +257,49 @@ async function endRound() {
   if (!confirm(`End Round ${A.game?.round} now and show leaderboard?`)) return;
   await gameRef.update({ state: 'round_end' });
   toast(`Round ${A.game?.round} ended.`, 'success');
+}
+
+async function issueTiebreaker() {
+  if (!A.game) return;
+  const used = new Set([
+    ...(A.game.r1Questions || []),
+    ...(A.game.r2Questions || []),
+    ...(A.game.usedTiebreakers || []),
+  ]);
+  const available = QUESTIONS.filter(q => !used.has(q.id) && q.flag !== 'skip');
+  if (available.length === 0) { toast('No unused questions available for tiebreaker!'); return; }
+  const q = available[Math.floor(Math.random() * available.length)];
+  const returnState = A.game.state;
+  const endTime = Date.now() + QUESTION_TIME_SECONDS * 1000;
+  const qId = q.id;
+  await gameRef.update({
+    state: 'tiebreaker_active',
+    tiebreakerQuestionId: qId,
+    tiebreakerReturnState: returnState,
+    questionEndTime: endTime,
+    usedTiebreakers: [...(A.game.usedTiebreakers || []), qId],
+  });
+  setTimeout(async () => {
+    const snap = await gameRef.once('value');
+    const g = snap.val();
+    if (g && g.state === 'tiebreaker_active' && g.tiebreakerQuestionId === qId) {
+      await gameRef.update({ state: 'tiebreaker_closed' });
+    }
+  }, QUESTION_TIME_SECONDS * 1000 + 2000);
+  toast('Tiebreaker question issued!', 'success');
+}
+
+async function closeTiebreaker() {
+  await gameRef.update({ state: 'tiebreaker_closed' });
+  toast('Tiebreaker closed.');
+}
+
+async function skipTiebreakerResults() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  const returnState = A.game.tiebreakerReturnState;
+  A.markings = {};
+  A.scoringApplied = false;
+  await gameRef.update({ state: returnState });
 }
 
 async function endGame() {
@@ -331,12 +393,16 @@ function buildMain() {
 
 function stateLabel(state) {
   return {
-    lobby:           'Lobby',
-    question_active: 'Question Active',
-    question_closed: 'Question Closed',
-    scoring:         'Scoring',
-    round_end:       'Round End',
-    game_end:        'Game Over',
+    lobby:                'Lobby',
+    question_active:      'Question Active',
+    question_closed:      'Question Closed',
+    scoring:              'Scoring',
+    question_results:     'Showing Results',
+    round_end:            'Round End',
+    game_end:             'Game Over',
+    tiebreaker_active:    'Tiebreaker Active',
+    tiebreaker_closed:    'Tiebreaker Closed',
+    tiebreaker_results:   'Tiebreaker Results',
   }[state] || state;
 }
 
@@ -392,13 +458,27 @@ function buildGameTab() {
         <p class="text-muted text-sm text-center mb-8">Showing results to players… auto-advances in ~10s.</p>
         <button class="btn btn-gold" onclick="nextQuestion()">→ Skip to Next Now</button>` : ''}
 
+      ${state === 'tiebreaker_active' ? `
+        <p class="text-muted text-sm mb-16">⚡ Tiebreaker live — <strong>${answerCount}</strong> / <strong>${playerCount}</strong> answered.</p>
+        <button class="btn btn-outline" onclick="closeTiebreaker()">⏹ Close Tiebreaker Early</button>` : ''}
+
+      ${state === 'tiebreaker_closed' ? `
+        <p class="text-muted text-sm mb-8">⚡ Tiebreaker closed — <strong>${answerCount}</strong> answer${answerCount!==1?'s':''} in. Mark below, then apply.</p>
+        ${answerCount === 0 ? `<button class="btn btn-gold" onclick="skipTiebreakerResults()">→ Skip (No Answers)</button>` : ''}` : ''}
+
+      ${state === 'tiebreaker_results' ? `
+        <p class="text-muted text-sm text-center mb-8">Showing tiebreaker results… returning to leaderboard in ~10s.</p>
+        <button class="btn btn-gold" onclick="skipTiebreakerResults()">→ Return to Leaderboard Now</button>` : ''}
+
       ${state === 'round_end' ? `
         ${round < 2
           ? `<button class="btn btn-gold" onclick="startRound(2)">▶ Start Round 2</button>`
-          : `<button class="btn btn-gold" onclick="endGame()">🏁 End Game &amp; Show Final Scores</button>`}` : ''}
+          : `<button class="btn btn-gold" onclick="endGame()">🏁 End Game &amp; Show Final Scores</button>`}
+        <button class="btn btn-outline mt-8" onclick="issueTiebreaker()">⚡ Issue Tiebreaker</button>` : ''}
 
       ${state === 'game_end' ? `
-        <p class="text-center text-gold" style="font-size:18px;font-weight:700">🎉 Game Over!</p>` : ''}
+        <p class="text-center text-gold" style="font-size:18px;font-weight:700">🎉 Game Over!</p>
+        <button class="btn btn-outline mt-8" onclick="issueTiebreaker()">⚡ Issue Tiebreaker</button>` : ''}
 
       <hr style="border-color:var(--border);margin:16px 0">
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -407,7 +487,7 @@ function buildGameTab() {
       </div>
     </div>
 
-    ${['question_active','question_closed','scoring'].includes(state) && q ? `
+    ${['question_active','question_closed','scoring','tiebreaker_active','tiebreaker_closed'].includes(state) && q ? `
       <div style="margin-bottom:16px">
         <div class="correct-answer-ref" style="margin-bottom:12px">
           <strong>Ref:</strong> ${esc(q.answer)}
@@ -457,11 +537,36 @@ function buildGameTab() {
 
 function buildLeaderboardTab() {
   const sorted = sortedPlayers();
-  const round  = A.game?.round || 1;
+
+  const r1Max = Math.max(0, ...sorted.map(p => p.round1Score || 0));
+  const r2Max = Math.max(0, ...sorted.map(p => p.round2Score || 0));
+  const totalMax = Math.max(0, ...sorted.map(p => p.score || 0));
+  const r1Winners    = sorted.filter(p => r1Max > 0 && (p.round1Score || 0) === r1Max);
+  const r2Winners    = sorted.filter(p => r2Max > 0 && (p.round2Score || 0) === r2Max);
+  const grandWinners = sorted.filter(p => totalMax > 0 && p.score === totalMax);
 
   return `
+    ${grandWinners.length > 0 ? `
+      <div class="winner-banner winner-grand" style="margin-bottom:12px">
+        <div class="winner-label">🏆 Grand Total Winner${grandWinners.length > 1 ? 's' : ''}</div>
+        <div class="winner-name">${grandWinners.map(p => esc(p.name)).join(' &amp; ')}</div>
+      </div>` : ''}
+
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      ${r1Winners.length > 0 ? `
+        <div class="round-winner-box">
+          <div class="winner-label">R1 Winner</div>
+          <div class="round-winner-name">${r1Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
+        </div>` : ''}
+      ${r2Winners.length > 0 ? `
+        <div class="round-winner-box">
+          <div class="winner-label">R2 Winner</div>
+          <div class="round-winner-name">${r2Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
+        </div>` : ''}
+    </div>
+
     <div class="card">
-      <div class="card-title">Leaderboard — After Round ${round}</div>
+      <div class="card-title">Full Standings</div>
       <div class="leaderboard">
         ${sorted.map((p, i) => `
           <div class="leaderboard-row rank-${i+1}">

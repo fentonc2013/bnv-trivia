@@ -95,7 +95,7 @@ const QUESTIONS = [
   {
     id: 'q12',
     round: 2,
-    question: "In Outkast's song \"Hey Ya\", Andre 3000 tells you to shake it like a _____ _____.",
+    question: "In Outkast's song \"Hey Ya\", Andre 3000 tells you to shake it like a _______.",
     answer: "Polaroid Picture",
     points: 1
   },
@@ -200,7 +200,7 @@ const QUESTIONS = [
   {
     id: 'q26',
     round: 2,
-    question: "Finish this Sublime lyric from \"What I Got\": \"Early in the morning, rising to the street, light me up that cigarette and I _____ _____ __ __ ___\"",
+    question: "Finish this Sublime lyric from \"What I Got\": \"Early in the morning, rising to the street, light me up that cigarette and I _______\"",
     answer: "strap shoes on my feet",
     points: 2,
     flag: 'must'

@@ -816,3 +816,70 @@ body {
   border: none;
   margin: 20px 0;
 }
+
+/* ============================================================
+   WINNER BANNERS
+   ============================================================ */
+.winner-banner {
+  background: linear-gradient(135deg, #2a2000, #1a1400);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  text-align: center;
+  box-shadow: var(--gold-glow);
+}
+
+.winner-banner.winner-grand {
+  background: linear-gradient(135deg, #3a2d00, #2a2000);
+  border-color: var(--gold-bright);
+}
+
+.winner-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 4px;
+}
+
+.winner-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.round-winner-box {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.round-winner-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 3px;
+}
+
+/* ============================================================
+   TIEBREAKER BADGE
+   ============================================================ */
+.tiebreaker-badge {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #000;
+  background: var(--gold);
+  border-radius: 99px;
+  padding: 4px 14px;
+  animation: pulse 1.5s ease-in-out infinite;
+}

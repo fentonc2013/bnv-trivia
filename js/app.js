@@ -56,13 +56,19 @@ function roundQuestions(round) {
   return QUESTIONS.filter(q => q.round === round); // fallback for legacy game state
 }
 
+const TIEBREAKER_STATES = ['tiebreaker_active','tiebreaker_closed','tiebreaker_results'];
+
 function currentQuestion() {
   if (!S.game) return null;
+  if (TIEBREAKER_STATES.includes(S.game.state))
+    return QUESTIONS.find(q => q.id === S.game.tiebreakerQuestionId) || null;
   return roundQuestions(S.game.round)[S.game.questionIndex] ?? null;
 }
 
 function currentQuestionKey() {
   if (!S.game) return null;
+  if (TIEBREAKER_STATES.includes(S.game.state))
+    return `tb_${S.game.tiebreakerQuestionId}`;
   return `r${S.game.round}_q${S.game.questionIndex}`;
 }
 
@@ -213,8 +219,8 @@ function handleGameState(prev) {
     S.prevQuestionKey = newKey;
   }
 
-  // Check if already answered this question
-  if (state === 'question_active' && !S.myAnswer) {
+  // Check if already answered this question (regular or tiebreaker)
+  if ((state === 'question_active' || state === 'tiebreaker_active') && !S.myAnswer) {
     // Check Firebase in case of reconnect
     db.ref(`trivia/answers/${newKey}/${S.playerId}`).once('value').then(snap => {
       if (snap.val()) {
@@ -245,14 +251,16 @@ function handleGameState(prev) {
       }
       break;
     case 'question_active':
-      // already answered
+    case 'tiebreaker_active':
       if (S.myAnswer) { S.view = 'submitted'; clearTimer(); }
       break;
     case 'question_closed':
+    case 'tiebreaker_closed':
     case 'scoring':
       clearTimer();
       S.view = 'submitted';
       break;
+    case 'tiebreaker_results':
     case 'question_results': {
       clearTimer();
       const key = currentQuestionKey();
@@ -369,9 +377,11 @@ function buildQuestion() {
       <div style="width:100%;max-width:480px">
 
         <div class="question-meta">
-          <span class="question-round-label">Round ${S.game.round}</span>
-          <span class="question-number">Q ${qNum} / ${total}</span>
-          <span class="points-badge points-${q.points}">${q.points} pt${q.points !== 1 ? 's' : ''}</span>
+          ${S.game.state === 'tiebreaker_active'
+            ? `<span class="tiebreaker-badge">⚡ Tiebreaker</span>`
+            : `<span class="question-round-label">Round ${S.game.round}</span>
+               <span class="question-number">Q ${qNum} / ${total}</span>
+               <span class="points-badge points-${q.points}">${q.points} pt${q.points !== 1 ? 's' : ''}</span>`}
           <span class="timer-pill${initSecs <= 10 ? ' urgent' : ''}">${initSecs}s</span>
         </div>
 
@@ -448,17 +458,24 @@ function buildQuestionResults() {
 }
 
 function buildRoundEnd() {
-  const round   = S.game?.round || 1;
-  const sorted  = Object.entries(S.players)
+  const round  = S.game?.round || 1;
+  const sorted = Object.entries(S.players)
     .map(([id, p]) => ({ id, ...p }))
     .sort((a,b) => b.score - a.score);
+  const roundKey = `round${round}Score`;
+  const roundMax = Math.max(0, ...sorted.map(p => p[roundKey] || 0));
+  const roundWinners = sorted.filter(p => roundMax > 0 && (p[roundKey] || 0) === roundMax);
 
   return `
     <div class="screen" style="justify-content:flex-start;padding-top:24px">
       <div style="width:100%;max-width:480px">
         <div style="text-align:center;font-size:48px;margin-bottom:8px">🏆</div>
         <div class="auth-title text-center">Round ${round} Complete!</div>
-        <div class="auth-subtitle">Scores after Round ${round}</div>
+        ${roundWinners.length > 0 ? `
+          <div class="winner-banner">
+            <div class="winner-label">Round ${round} Winner${roundWinners.length > 1 ? 's' : ''}</div>
+            <div class="winner-name">${roundWinners.map(p => esc(p.name)).join(' &amp; ')}</div>
+          </div>` : ''}
         <div class="leaderboard mt-16">
           ${sorted.map((p, i) => `
             <div class="leaderboard-row rank-${i+1}${p.id === S.playerId ? ' is-me' : ''}">
@@ -484,18 +501,44 @@ function buildGameEnd() {
   const me = sorted.find(p => p.id === S.playerId);
   const myRank = me ? sorted.indexOf(me) + 1 : null;
 
+  const r1Max = Math.max(0, ...sorted.map(p => p.round1Score || 0));
+  const r2Max = Math.max(0, ...sorted.map(p => p.round2Score || 0));
+  const totalMax = Math.max(0, ...sorted.map(p => p.score || 0));
+  const r1Winners = sorted.filter(p => r1Max > 0 && (p.round1Score || 0) === r1Max);
+  const r2Winners = sorted.filter(p => r2Max > 0 && (p.round2Score || 0) === r2Max);
+  const grandWinners = sorted.filter(p => totalMax > 0 && p.score === totalMax);
+
   return `
     <div class="screen" style="justify-content:flex-start;padding-top:24px">
       <div style="width:100%;max-width:480px">
         <div style="text-align:center;font-size:56px;margin-bottom:8px">🎉</div>
         <div class="auth-title text-center">Final Results</div>
-        <div class="auth-subtitle">${esc(GAME_NAME)}</div>
         ${myRank ? `<p class="text-center text-gold mt-8" style="font-size:15px">You finished <strong>#${myRank}</strong> with <strong>${me.score} point${me.score!==1?'s':''}</strong></p>` : ''}
+
+        ${grandWinners.length > 0 ? `
+          <div class="winner-banner winner-grand mt-16">
+            <div class="winner-label">🏆 Grand Total Winner${grandWinners.length > 1 ? 's' : ''}</div>
+            <div class="winner-name">${grandWinners.map(p => esc(p.name)).join(' &amp; ')}</div>
+          </div>` : ''}
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          ${r1Winners.length > 0 ? `
+            <div class="round-winner-box">
+              <div class="winner-label">R1 Winner</div>
+              <div class="round-winner-name">${r1Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
+            </div>` : ''}
+          ${r2Winners.length > 0 ? `
+            <div class="round-winner-box">
+              <div class="winner-label">R2 Winner</div>
+              <div class="round-winner-name">${r2Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
+            </div>` : ''}
+        </div>
+
         <div class="leaderboard mt-16">
           ${sorted.map((p, i) => `
             <div class="leaderboard-row rank-${i+1}${p.id === S.playerId ? ' is-me' : ''}">
               <div class="rank-badge">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i+1}</div>
-              <div class="leaderboard-name">${esc(p.name)}</div>
+              <div class="leaderboard-name">${esc(p.name)}${p.id === S.playerId ? ' <span style="color:var(--gold);font-size:12px">◀ you</span>' : ''}</div>
               <div>
                 <div class="leaderboard-score">${p.score}</div>
                 <div class="score-breakdown">R1: ${p.round1Score||0} · R2: ${p.round2Score||0}</div>
