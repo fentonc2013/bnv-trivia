@@ -99,6 +99,11 @@ async function submitJoin() {
   if (!name) { errEl.textContent = 'Enter your name.'; return; }
   if (name.length > 24) { errEl.textContent = 'Name too long (max 24 chars).'; return; }
 
+  const duplicate = Object.values(S.players).some(
+    p => p.name.toLowerCase() === name.toLowerCase()
+  );
+  if (duplicate) { errEl.textContent = 'That name is already taken — pick another.'; return; }
+
   S.playerName = name;
   localStorage.setItem('triviaPlayerName', name);
 
