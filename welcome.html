@@ -48,8 +48,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      padding: clamp(10px, 1.4vh, 20px) 60px;
+      gap: 2px;
+      padding: clamp(8px, 1.2vh, 18px) 60px;
       border-bottom: 1px solid var(--rule);
       background: linear-gradient(180deg, #111008 0%, var(--bg) 100%);
     }
@@ -57,7 +57,7 @@
     .header-title {
       font-family: 'Playfair Display', serif;
       font-weight: 900;
-      font-size: clamp(32px, 4vw, 64px);
+      font-size: clamp(24px, 5vh, 62px);
       line-height: 1;
       color: var(--text);
       text-transform: uppercase;
@@ -69,7 +69,7 @@
     .header-sub {
       font-family: 'Oswald', sans-serif;
       font-weight: 400;
-      font-size: clamp(11px, 1.2vw, 17px);
+      font-size: clamp(10px, 1.3vh, 16px);
       letter-spacing: 6px;
       text-transform: uppercase;
       color: var(--gold);
@@ -78,10 +78,56 @@
     .header-year {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(10px, 1vw, 15px);
+      font-size: clamp(9px, 1.1vh, 14px);
       letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--muted);
+    }
+
+    /* ══════════════════════════
+       QR BAR (below header)
+    ══════════════════════════ */
+    .qr-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(3px, 0.5vh, 7px);
+      padding: clamp(6px, 0.9vh, 13px) 60px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .qr-frame {
+      background: #fff;
+      padding: clamp(6px, 0.8vh, 11px);
+      border-radius: 3px;
+      box-shadow: 0 0 28px rgba(201,168,76,0.12);
+      width: clamp(70px, 12vh, 140px);
+      height: clamp(70px, 12vh, 140px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .qr-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      font-size: clamp(10px, 1.2vh, 16px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    .qr-pw {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 1.1vh, 14px);
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-align: center;
     }
 
     /* ══════════════════════════
@@ -94,7 +140,7 @@
     }
 
     .col {
-      padding: clamp(14px, 1.8vh, 26px) clamp(32px, 3.5vw, 60px);
+      padding: clamp(12px, 1.6vh, 24px) clamp(24px, 2.8vw, 52px);
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -103,7 +149,7 @@
       overflow: hidden;
     }
 
-    .col-left  { border-right: 1px solid var(--rule); }
+    .col-left { border-right: 1px solid var(--rule); }
 
     /* ══════════════════════════
        RECORD (left pane)
@@ -111,33 +157,32 @@
     .record-kicker {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(11px, 1.1vw, 15px);
+      font-size: clamp(9px, 1.1vh, 13px);
       letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: clamp(8px, 1.2vh, 14px);
+      margin-bottom: clamp(6px, 0.8vh, 11px);
     }
 
     .record-title {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
-      font-size: clamp(18px, 2.1vw, 32px);
+      font-size: clamp(15px, 2.4vh, 30px);
       line-height: 1.2;
       color: var(--text);
-      padding-bottom: clamp(12px, 1.6vh, 18px);
+      padding-bottom: clamp(8px, 1vh, 14px);
       border-bottom: 1px solid var(--rule);
-      margin-bottom: clamp(10px, 1.4vh, 16px);
+      margin-bottom: clamp(8px, 1vh, 14px);
       width: 100%;
     }
 
     .record-body {
       font-family: 'Inter', sans-serif;
       font-weight: 300;
-      font-size: clamp(12px, 1.15vw, 16px);
-      line-height: 1.6;
+      font-size: clamp(11px, 1.35vh, 15px);
+      line-height: 1.55;
       color: var(--muted);
-      margin-bottom: clamp(8px, 1vh, 14px);
-      max-width: 440px;
+      margin-bottom: clamp(6px, 0.9vh, 12px);
     }
 
     .record-body:last-child { margin-bottom: 0; }
@@ -149,20 +194,20 @@
     .drinks-kicker {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(11px, 1.1vw, 15px);
+      font-size: clamp(9px, 1.1vh, 13px);
       letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: clamp(14px, 2vh, 24px);
+      margin-bottom: clamp(10px, 1.4vh, 20px);
     }
 
-    .drink { margin-bottom: clamp(14px, 2vh, 26px); max-width: 400px; }
+    .drink { margin-bottom: clamp(10px, 1.5vh, 22px); }
     .drink:last-child { margin-bottom: 0; }
 
     .drink-side {
       font-family: 'Oswald', sans-serif;
       font-weight: 300;
-      font-size: clamp(9px, 0.8vw, 11px);
+      font-size: clamp(8px, 0.9vh, 11px);
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--muted);
@@ -172,78 +217,31 @@
     .drink-name {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
-      font-size: clamp(15px, 1.6vw, 24px);
+      font-size: clamp(14px, 2vh, 24px);
       color: var(--text);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       line-height: 1.1;
     }
 
     .drink-desc {
       font-family: 'Inter', sans-serif;
       font-weight: 300;
-      font-size: clamp(12px, 1.15vw, 15px);
+      font-size: clamp(11px, 1.3vh, 15px);
       color: var(--muted);
-      line-height: 1.65;
+      line-height: 1.6;
     }
 
     .drink-rule {
       border: none;
       border-top: 1px solid var(--rule);
       width: 100%;
-      max-width: 400px;
-      margin: clamp(14px, 2vh, 24px) 0;
-    }
-
-    /* ══════════════════════════
-       QR BAR (below header)
-    ══════════════════════════ */
-    .qr-bar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(4px, 0.5vh, 7px);
-      padding: clamp(8px, 1vh, 14px) 60px;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .qr-label {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 400;
-      font-size: clamp(12px, 1.2vw, 17px);
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-align: center;
-    }
-
-    .qr-frame {
-      background: #fff;
-      padding: clamp(8px, 0.9vw, 13px);
-      border-radius: 3px;
-      box-shadow: 0 0 28px rgba(201,168,76,0.12);
-      width: clamp(95px, 10.1vw, 139px);
-      height: clamp(95px, 10.1vw, 139px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .qr-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
-
-    .qr-pw {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(11px, 1.1vw, 15px);
-      letter-spacing: 3px;
-      color: var(--muted);
-      text-align: center;
+      margin: clamp(10px, 1.5vh, 22px) 0;
     }
 
     .qr-note {
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: clamp(12px, 1.2vw, 17px);
+      font-size: clamp(11px, 1.2vh, 16px);
       color: var(--muted);
     }
   </style>
