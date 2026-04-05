@@ -42,7 +42,7 @@ function render() {
 
 function roundQuestions(round) {
   if (!A.game) return [];
-  const ids = round === 1 ? A.game.r1Questions : A.game.r2Questions;
+  const ids = round === 1 ? A.game.r1Questions : round === 2 ? A.game.r2Questions : A.game.r3Questions;
   if (ids) return ids.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean);
   return QUESTIONS.filter(q => q.round === round); // fallback for legacy game state
 }
@@ -302,6 +302,38 @@ async function skipTiebreakerResults() {
   await gameRef.update({ state: returnState });
 }
 
+async function startRound3() {
+  if (!confirm('Start Round 3? All current scores and players will be preserved.')) return;
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const used = new Set([
+    ...(A.game.r1Questions || []),
+    ...(A.game.r2Questions || []),
+    ...(A.game.usedTiebreakers || []),
+  ]);
+  const available = QUESTIONS.filter(q => !used.has(q.id) && q.flag !== 'skip');
+  const ones = shuffle(available.filter(q => q.points === 1).map(q => q.id));
+  const twos = shuffle(available.filter(q => q.points === 2).map(q => q.id));
+  const r3 = shuffle([...ones.slice(0, 5), ...twos.slice(0, 5)]);
+
+  await gameRef.update({
+    state: 'lobby',
+    round: 3,
+    questionIndex: 0,
+    questionEndTime: 0,
+    r3Questions: r3,
+  });
+  toast('Round 3 loaded! Players stay in — open Question 1 when ready.', 'success');
+}
+
 async function endGame() {
   if (!confirm('End the game and show final scores to all players?')) return;
   await gameRef.update({ state: 'game_end' });
@@ -471,8 +503,11 @@ function buildGameTab() {
         <button class="btn btn-gold" onclick="skipTiebreakerResults()">→ Return to Leaderboard Now</button>` : ''}
 
       ${state === 'round_end' ? `
-        ${round < 2
+        ${round === 1
           ? `<button class="btn btn-gold" onclick="startRound(2)">▶ Start Round 2</button>`
+          : round === 2
+          ? `<button class="btn btn-gold" onclick="startRound3()">▶ Add &amp; Start Round 3</button>
+             <button class="btn btn-outline mt-8" onclick="endGame()">🏁 End Game</button>`
           : `<button class="btn btn-gold" onclick="endGame()">🏁 End Game &amp; Show Final Scores</button>`}
         <button class="btn btn-outline mt-8" onclick="issueTiebreaker()">⚡ Issue Tiebreaker</button>` : ''}
 
@@ -540,9 +575,11 @@ function buildLeaderboardTab() {
 
   const r1Max = Math.max(0, ...sorted.map(p => p.round1Score || 0));
   const r2Max = Math.max(0, ...sorted.map(p => p.round2Score || 0));
+  const r3Max = Math.max(0, ...sorted.map(p => p.round3Score || 0));
   const totalMax = Math.max(0, ...sorted.map(p => p.score || 0));
   const r1Winners    = sorted.filter(p => r1Max > 0 && (p.round1Score || 0) === r1Max);
   const r2Winners    = sorted.filter(p => r2Max > 0 && (p.round2Score || 0) === r2Max);
+  const r3Winners    = sorted.filter(p => r3Max > 0 && (p.round3Score || 0) === r3Max);
   const grandWinners = sorted.filter(p => totalMax > 0 && p.score === totalMax);
 
   return `
@@ -562,6 +599,11 @@ function buildLeaderboardTab() {
         <div class="round-winner-box">
           <div class="winner-label">R2 Winner</div>
           <div class="round-winner-name">${r2Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
+        </div>` : ''}
+      ${r3Winners.length > 0 ? `
+        <div class="round-winner-box">
+          <div class="winner-label">R3 Winner</div>
+          <div class="round-winner-name">${r3Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
         </div>` : ''}
     </div>
 

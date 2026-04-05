@@ -242,6 +242,74 @@ const QUESTIONS = [
     question: "Which of the following was NOT an official nickname for one of the Spice Girls — Sporty Spice, Ginger Spice, Posh Spice, or Sugar Spice?",
     answer: "Sugar Spice",
     points: 1
+  },
+
+  // -------------------------
+  // ROUND 3 QUESTIONS
+  // -------------------------
+
+  {
+    id: 'q32',
+    round: 3,
+    question: "Name the *NSYNC member who went on to have a massive solo career, releasing 'SexyBack' in 2006 and 'Mirrors' in 2013.",
+    answer: "Justin Timberlake",
+    points: 1
+  },
+  {
+    id: 'q33',
+    round: 3,
+    question: "What was the name of Nirvana's 1991 breakthrough album, widely credited with bringing grunge into the mainstream?",
+    answer: "Nevermind",
+    points: 1
+  },
+  {
+    id: 'q34',
+    round: 3,
+    question: "Finish this blink-182 lyric from 'All the Small Things': 'Say it ain't so, I will not go, turn the lights off, _______'",
+    answer: "carry me home",
+    points: 1
+  },
+  {
+    id: 'q35',
+    round: 3,
+    question: "This pop star, who got her start as lead singer of Destiny's Child, released 'Crazy in Love' as her debut solo single in 2003.",
+    answer: "Beyoncé",
+    points: 1
+  },
+  {
+    id: 'q36',
+    round: 3,
+    question: "This British singer's 2006 album 'Back to Black' swept the Grammys, winning 5 in a single night including Record of the Year for 'Rehab.'",
+    answer: "Amy Winehouse",
+    points: 2
+  },
+  {
+    id: 'q37',
+    round: 3,
+    question: "Before forming the Foo Fighters, Dave Grohl was the drummer for which iconic 90s band?",
+    answer: "Nirvana",
+    points: 2
+  },
+  {
+    id: 'q38',
+    round: 3,
+    question: "This French electronic duo, famous for performing in robot helmets, released 'One More Time' in 2000 and reunited with Pharrell Williams for 'Get Lucky' in 2013.",
+    answer: "Daft Punk",
+    points: 2
+  },
+  {
+    id: 'q39',
+    round: 3,
+    question: "Jack and Meg White of the White Stripes publicly claimed to be brother and sister for years. What was their actual relationship?",
+    answer: "Ex-husband and wife",
+    points: 2
+  },
+  {
+    id: 'q40',
+    round: 3,
+    question: "The infamous 2004 Super Bowl halftime 'wardrobe malfunction' involved Justin Timberlake and which other performer?",
+    answer: "Janet Jackson",
+    points: 2
   }
 
 ];
@@ -276,5 +344,6 @@ function generateQuestionOrder() {
   return {
     r1: shuffle([...ones.slice(0, 5),  ...twos.slice(0, 5)]),
     r2: shuffle([...ones.slice(5, 10), ...twos.slice(5, 10)]),
+    r3: shuffle([...ones.slice(10, 15), ...twos.slice(10, 15)]),
   };
 }

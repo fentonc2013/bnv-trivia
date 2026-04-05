@@ -51,7 +51,7 @@ function render() {
 
 function roundQuestions(round) {
   if (!S.game) return [];
-  const ids = round === 1 ? S.game.r1Questions : S.game.r2Questions;
+  const ids = round === 1 ? S.game.r1Questions : round === 2 ? S.game.r2Questions : S.game.r3Questions;
   if (ids) return ids.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean);
   return QUESTIONS.filter(q => q.round === round); // fallback for legacy game state
 }
@@ -349,7 +349,7 @@ function buildLobby() {
     <div class="screen">
       <div class="card gold-border" style="max-width:400px;width:100%">
         <div class="auth-logo">🎶</div>
-        <div class="auth-title text-center">${round === 1 ? 'Get Ready!' : 'Round 2 Coming Up!'}</div>
+        <div class="auth-title text-center">${round === 1 ? 'Get Ready!' : round === 2 ? 'Round 2 Coming Up!' : 'Round 3 Coming Up!'}</div>
         <div class="auth-subtitle">Waiting for the host to start Round ${round}…</div>
         <hr class="gold-rule">
         <div class="card-title">Players Joined (${playerList.length})</div>
@@ -488,12 +488,12 @@ function buildRoundEnd() {
               <div class="leaderboard-name">${esc(p.name)}${p.id === S.playerId ? ' <span style="color:var(--gold);font-size:12px">◀ you</span>' : ''}</div>
               <div>
                 <div class="leaderboard-score">${p.score}</div>
-                <div class="score-breakdown">R1: ${p.round1Score||0} · R2: ${p.round2Score||0}</div>
+                <div class="score-breakdown">R1: ${p.round1Score||0} · R2: ${p.round2Score||0}${round >= 3 ? ` · R3: ${p.round3Score||0}` : ''}</div>
               </div>
             </div>`).join('')}
           ${sorted.length === 0 ? '<p class="text-muted text-center">No scores yet</p>' : ''}
         </div>
-        ${round < 2 ? '<p class="text-muted text-center text-sm mt-24">Come back for Round 2 later!</p>' : ''}
+        ${round < 3 ? `<p class="text-muted text-center text-sm mt-24">Come back for Round ${round + 1} later!</p>` : ''}
       </div>
     </div>`;
 }
@@ -508,9 +508,11 @@ function buildGameEnd() {
 
   const r1Max = Math.max(0, ...sorted.map(p => p.round1Score || 0));
   const r2Max = Math.max(0, ...sorted.map(p => p.round2Score || 0));
+  const r3Max = Math.max(0, ...sorted.map(p => p.round3Score || 0));
   const totalMax = Math.max(0, ...sorted.map(p => p.score || 0));
   const r1Winners = sorted.filter(p => r1Max > 0 && (p.round1Score || 0) === r1Max);
   const r2Winners = sorted.filter(p => r2Max > 0 && (p.round2Score || 0) === r2Max);
+  const r3Winners = sorted.filter(p => r3Max > 0 && (p.round3Score || 0) === r3Max);
   const grandWinners = sorted.filter(p => totalMax > 0 && p.score === totalMax);
 
   return `
@@ -537,6 +539,11 @@ function buildGameEnd() {
               <div class="winner-label">R2 Winner</div>
               <div class="round-winner-name">${r2Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
             </div>` : ''}
+          ${r3Winners.length > 0 ? `
+            <div class="round-winner-box">
+              <div class="winner-label">R3 Winner</div>
+              <div class="round-winner-name">${r3Winners.map(p => esc(p.name)).join(' &amp; ')}</div>
+            </div>` : ''}
         </div>
 
         <div class="leaderboard mt-16">
@@ -546,7 +553,7 @@ function buildGameEnd() {
               <div class="leaderboard-name">${esc(p.name)}${p.id === S.playerId ? ' <span style="color:var(--gold);font-size:12px">◀ you</span>' : ''}</div>
               <div>
                 <div class="leaderboard-score">${p.score}</div>
-                <div class="score-breakdown">R1: ${p.round1Score||0} · R2: ${p.round2Score||0}</div>
+                <div class="score-breakdown">R1: ${p.round1Score||0} · R2: ${p.round2Score||0}${r3Max > 0 ? ` · R3: ${p.round3Score||0}` : ''}</div>
               </div>
             </div>`).join('')}
         </div>
